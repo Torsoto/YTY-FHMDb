@@ -12,6 +12,8 @@ import javafx.scene.paint.Color;
 public class MovieCell extends ListCell<Movie> {
     private final Label title = new Label();
     private final Label detail = new Label();
+
+    private final Label genre = new Label();
     private final VBox layout = new VBox(title, detail);
 
     @Override
@@ -29,7 +31,6 @@ public class MovieCell extends ListCell<Movie> {
                             : "No description available"
             );
 
-
             // color scheme
             title.getStyleClass().add("text-yellow");
             detail.getStyleClass().add("text-white");
@@ -39,6 +40,7 @@ public class MovieCell extends ListCell<Movie> {
             title.fontProperty().set(title.getFont().font(20));
             detail.setMaxWidth(this.getScene().getWidth() - 30);
             detail.setWrapText(true);
+            genre.setText(movie.getGenre());
             layout.setPadding(new Insets(10));
             layout.spacingProperty().set(10);
             layout.alignmentProperty().set(javafx.geometry.Pos.CENTER_LEFT);
