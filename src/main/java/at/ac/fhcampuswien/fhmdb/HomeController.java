@@ -13,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -36,6 +37,12 @@ public class HomeController implements Initializable {
 
     private final ObservableList<Movie> observableMovies = FXCollections.observableArrayList();   // automatically updates corresponding UI elements when underlying data changes
 
+    public void resetCategory(){
+        genreComboBox.getSelectionModel().clearSelection();
+        observableMovies.clear();
+        observableMovies.addAll(allMovies);
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -50,6 +57,15 @@ public class HomeController implements Initializable {
         // TODO add genre filter items with genreComboBox.getItems().addAll(...)
         genreComboBox.setPromptText("Filter by Genre");
         genreComboBox.getItems().addAll(Movie.getAllGenres());
+        genreComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            observableMovies.clear();
+            for (Movie movie : allMovies) {
+                if (Arrays.asList(movie.getGenre()).contains(newValue)) {
+                    observableMovies.add(movie);
+                    movieListView.setItems(observableMovies);
+                }
+            }
+        });
 
         // TODO add event handlers to buttons and call the regarding methods
         // either set event handlers in the fxml file (onAction) or add them here
