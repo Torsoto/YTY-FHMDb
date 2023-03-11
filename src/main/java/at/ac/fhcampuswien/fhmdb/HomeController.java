@@ -14,6 +14,7 @@ import javafx.scene.control.TextField;
 
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -88,16 +89,20 @@ public class HomeController implements Initializable {
             }
         });
 
-        // Sort button example:
+
+        //sortiert die Filme auf- und absteigend
         sortBtn.setOnAction(actionEvent -> {
             if(sortBtn.getText().equals("Sort (asc)")) {
-                // TODO sort observableMovies ascending
+                // sort observableMovies ascending
+                FXCollections.sort(observableMovies, Comparator.comparing(Movie::getTitle));
                 sortBtn.setText("Sort (desc)");
             } else {
-                // TODO sort observableMovies descending
+                // sort observableMovies descending
+                FXCollections.sort(observableMovies, Comparator.comparing(Movie::getTitle).reversed());
                 sortBtn.setText("Sort (asc)");
             }
         });
+
 
 
     }
