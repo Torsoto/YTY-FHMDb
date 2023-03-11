@@ -19,13 +19,13 @@ import java.util.ResourceBundle;
 
 public class HomeController implements Initializable {
     @FXML
-    public JFXButton searchBtn;
+    public JFXButton resetBtn;
 
     @FXML
     public TextField searchField;
 
     @FXML
-    public JFXListView movieListView;
+    public JFXListView<Movie> movieListView;
 
     @FXML
     public JFXComboBox<String> genreComboBox;
@@ -73,9 +73,6 @@ public class HomeController implements Initializable {
 
         observableMovies.addAll(allMovies);         // add dummy data to observable list
 
-        //Layout of Labels
-        searchField.setPrefWidth(800);
-        searchBtn.setText("Reset Category");
         // initialize UI stuff
         movieListView.setItems(observableMovies);// set data of observable list to list view
         movieListView.setCellFactory(movieListView -> new MovieCell()); // use custom cell factory to display data
