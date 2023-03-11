@@ -27,13 +27,13 @@
       <padding>
          <Insets bottom="20.0" left="10.0" top="20.0" />
       </padding>
-      <JFXButton fx:id="sortBtn" style="-fx-background-color: #00acc1;" styleClass="background-yellow" stylesheets="@styles.css" text="Sort (asc)" textFill="WHITE" />
+      <JFXButton fx:id="sortBtn" styleClass="Btn" stylesheets="@styles.css" text="Sort (asc)" textFill="WHITE" />
       <TextField fx:id="searchField" prefHeight="25.0" prefWidth="375.0" promptText="Search" stylesheets="@styles.css">
          <HBox.margin>
             <Insets />
          </HBox.margin></TextField>
       <JFXComboBox fx:id="genreComboBox" focusColor="#f5c518" styleClass="filter-combo-box" stylesheets="@styles.css" />
-      <JFXButton fx:id="searchBtn" style="-fx-background-color: #00acc1;" styleClass="background-yellow" stylesheets="@styles.css" text="Filter" textFill="WHITE" />
+      <JFXButton fx:id="searchBtn" onAction="#resetCategory" styleClass="Btn" stylesheets="@styles.css" textFill="WHITE" />
    </HBox>
    <JFXListView fx:id="movieListView" style="-fx-background-color: #111111;" styleClass="background-black" stylesheets="@styles.css" VBox.vgrow="ALWAYS" />
 </VBox>
