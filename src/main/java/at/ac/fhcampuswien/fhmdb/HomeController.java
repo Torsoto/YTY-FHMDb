@@ -70,6 +70,24 @@ public class HomeController implements Initializable {
         // TODO add event handlers to buttons and call the regarding methods
         // either set event handlers in the fxml file (onAction) or add them here
 
+        // Add event listener to search field
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == null || newValue.trim().isEmpty()) {
+                observableMovies.clear();
+                observableMovies.addAll(allMovies);
+                return;
+            }
+            String searchText = newValue.trim().toLowerCase();
+            observableMovies.clear();
+            movieListView.getItems().clear();
+            for (Movie movie : allMovies) {
+                if (movie.getTitle().toLowerCase().contains(searchText) || movie.getDescription().toLowerCase().contains(searchText)) {
+                    observableMovies.add(movie);
+                    movieListView.setItems(observableMovies);
+                }
+            }
+        });
+
         // Sort button example:
         sortBtn.setOnAction(actionEvent -> {
             if(sortBtn.getText().equals("Sort (asc)")) {
