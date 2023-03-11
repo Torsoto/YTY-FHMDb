@@ -19,14 +19,13 @@ public class Movie {
         this.title = title;
         this.description = description;
 
-        for (int i = 0; i < genre.length; i++) {
-            for (int j = i; j < genres.length; j++){
-                if (genre[i].equals(genres[j])) {
-                    this.genre = genre;
-                    break;
-                }
+        List<String> validGenres = new ArrayList<>();
+        for (String g : genre) {
+            if (Arrays.asList(genres).contains(g)) {
+                validGenres.add(g);
             }
         }
+        this.genre = validGenres.toArray(new String[validGenres.size()]);
     }
 
     public  Movie(String title, String description){
@@ -62,7 +61,6 @@ public class Movie {
         Movie KUNGFUPANDA2 = new Movie("Kung Fu Panda 2", "Po must confront a new and powerful villain who is using a secret weapon to conquer China and destroy kung fu.", new String[]{"ANIMATION", "ACTION", "COMEDY"});
         Movie KUNGFUPANDA3 = new Movie("Kung Fu Panda 3", "Po reunites with his long-lost father and discovers a secret village of pandas, but an ancient and powerful villain threatens to destroy their peaceful existence.", new String[]{"ANIMATION", "ACTION", "COMEDY"});
         Movie PARASITE = new Movie("Parasite", "A poor family scheming to become the servants of a wealthy family gradually infiltrates their household, but an unexpected incident sets off a series of events that expose their greed and deception.", new String[]{"THRILLER", "DRAMA"});
-
 
         Movie[] movieArray = {SHAWSHANK, LOTR1, LOTR2, LOTR3, INCEPTION, PULPFICTION, FORRESTGUMP, INTERSTELLAR, SHUTTERISLAND, TAXIDRIVER, KUNGFUPANDA1, KUNGFUPANDA2, KUNGFUPANDA3};
         Arrays.sort(movieArray, (m1, m2) -> m1.getTitle().compareTo(m2.getTitle()));

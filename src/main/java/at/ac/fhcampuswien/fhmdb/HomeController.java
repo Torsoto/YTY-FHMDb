@@ -5,7 +5,6 @@ import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -29,19 +28,53 @@ public class HomeController implements Initializable {
     public JFXListView movieListView;
 
     @FXML
-    public JFXComboBox genreComboBox;
+    public JFXComboBox<String> genreComboBox;
 
     @FXML
     public JFXButton sortBtn;
 
     public List<Movie> allMovies = Movie.initializeMovies();
 
-    private final ObservableList<Movie> observableMovies = FXCollections.observableArrayList();   // automatically updates corresponding UI elements when underlying data changes
+    protected final ObservableList<Movie> observableMovies = FXCollections.observableArrayList();   // automatically updates corresponding UI elements when underlying data changes
 
     public void resetCategory(){
-        genreComboBox.getSelectionModel().clearSelection();
+        if (genreComboBox != null){
+            genreComboBox.getSelectionModel().clearSelection();
+        }
         observableMovies.clear();
         observableMovies.addAll(allMovies);
+    }
+
+    public void checkGenre(){
+        genreComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            String searchText = searchField.getText().trim().toLowerCase();
+            observableMovies.clear();
+            for (Movie movie : allMovies) {
+                if (Arrays.asList(movie.getGenre()).contains(newValue)
+                        && (searchText.isEmpty() || movie.getTitle().toLowerCase().contains(searchText)
+                        || movie.getDescription().toLowerCase().contains(searchText))) {
+                    observableMovies.add(movie);
+                    System.out.println(observableMovies);
+                }
+            }
+        });
+    }
+
+    public void checkSearch(){
+        // Add event listener to search field
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            String selectedGenre = genreComboBox.getSelectionModel().getSelectedItem();
+            String searchText = newValue.trim().toLowerCase();
+            observableMovies.clear();
+            for (Movie movie : allMovies) {
+                if ((selectedGenre == null || Arrays.asList(movie.getGenre()).contains(selectedGenre))
+                        && (searchText.isEmpty() || movie.getTitle().toLowerCase().contains(searchText)
+                        || movie.getDescription().toLowerCase().contains(searchText))) {
+                    observableMovies.add(movie);
+
+                }
+            }
+        });
     }
 
     @Override
@@ -51,59 +84,28 @@ public class HomeController implements Initializable {
 
         //Layout of Labels
         searchField.setPrefWidth(800);
+        searchBtn.setText("Reset Category");
         // initialize UI stuff
         movieListView.setItems(observableMovies);// set data of observable list to list view
         movieListView.setCellFactory(movieListView -> new MovieCell()); // use custom cell factory to display data
 
-        // TODO add genre filter items with genreComboBox.getItems().addAll(...)
         genreComboBox.setPromptText("Filter by Genre");
         genreComboBox.getItems().addAll(Movie.getAllGenres());
-        genreComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            observableMovies.clear();
-            for (Movie movie : allMovies) {
-                if (Arrays.asList(movie.getGenre()).contains(newValue)) {
-                    observableMovies.add(movie);
-                    movieListView.setItems(observableMovies);
-                }
-            }
-        });
 
-        // TODO add event handlers to buttons and call the regarding methods
-        // either set event handlers in the fxml file (onAction) or add them here
+        checkGenre();
+        checkSearch();
 
-        // Add event listener to search field
-        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == null || newValue.trim().isEmpty()) {
-                observableMovies.clear();
-                observableMovies.addAll(allMovies);
-                return;
-            }
-            String searchText = newValue.trim().toLowerCase();
-            observableMovies.clear();
-            movieListView.getItems().clear();
-            for (Movie movie : allMovies) {
-                if (movie.getTitle().toLowerCase().contains(searchText) || movie.getDescription().toLowerCase().contains(searchText)) {
-                    observableMovies.add(movie);
-                    movieListView.setItems(observableMovies);
-                }
-            }
-        });
-
-
-        //sortiert die Filme auf- und absteigend
+        //Sorts movies
         sortBtn.setOnAction(actionEvent -> {
-            if(sortBtn.getText().equals("Sort (asc)")) {
+            if(sortBtn.getText().equals("Sort A-Z")) {
                 // sort observableMovies ascending
                 FXCollections.sort(observableMovies, Comparator.comparing(Movie::getTitle));
-                sortBtn.setText("Sort (desc)");
+                sortBtn.setText("Sort Z-A");
             } else {
                 // sort observableMovies descending
                 FXCollections.sort(observableMovies, Comparator.comparing(Movie::getTitle).reversed());
-                sortBtn.setText("Sort (asc)");
+                sortBtn.setText("Sort A-Z");
             }
         });
-
-
-
     }
 }
