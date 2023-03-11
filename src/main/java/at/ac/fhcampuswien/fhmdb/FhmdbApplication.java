@@ -17,6 +17,7 @@ public class FhmdbApplication extends Application {
         stage.setTitle("YTY-FHMDb");
         stage.setScene(scene);
         stage.show();
+
     }
 
     public static void main(String[] args) {
