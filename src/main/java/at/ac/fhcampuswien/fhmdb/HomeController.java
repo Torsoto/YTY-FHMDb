@@ -45,36 +45,27 @@ public class HomeController implements Initializable {
         observableMovies.addAll(allMovies);
     }
 
-    public void checkGenre(){
-        genreComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            String searchText = searchField.getText().trim().toLowerCase();
-            observableMovies.clear();
-            for (Movie movie : allMovies) {
-                if (Arrays.asList(movie.getGenre()).contains(newValue)
-                        && (searchText.isEmpty() || movie.getTitle().toLowerCase().contains(searchText)
-                        || movie.getDescription().toLowerCase().contains(searchText))) {
-                    observableMovies.add(movie);
-                    System.out.println(observableMovies);
-                }
+    public void filterByGenre(String selectedGenre, String searchText){
+        observableMovies.clear();
+        for (Movie movie : allMovies) {
+            if ((selectedGenre == null || Arrays.asList(movie.getGenre()).contains(selectedGenre))
+                    && (searchText.isEmpty() || movie.getTitle().toLowerCase().contains(searchText.toLowerCase())
+                    || movie.getDescription().toLowerCase().contains(searchText.toLowerCase()))) {
+                observableMovies.add(movie);
             }
-        });
+        }
     }
 
-    public void checkSearch(){
-        // Add event listener to search field
-        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            String selectedGenre = genreComboBox.getSelectionModel().getSelectedItem();
-            String searchText = newValue.trim().toLowerCase();
-            observableMovies.clear();
-            for (Movie movie : allMovies) {
-                if ((selectedGenre == null || Arrays.asList(movie.getGenre()).contains(selectedGenre))
-                        && (searchText.isEmpty() || movie.getTitle().toLowerCase().contains(searchText)
-                        || movie.getDescription().toLowerCase().contains(searchText))) {
-                    observableMovies.add(movie);
+    public void searchMovies(String searchText){
+        String selectedGenre = genreComboBox.getSelectionModel().getSelectedItem();
+        filterByGenre(selectedGenre, searchText);
+    }
 
-                }
-            }
-        });
+    public void sort(){
+        FXCollections.sort(observableMovies, Comparator.comparing(Movie::getTitle));
+    }
+    public void sortReverse() {
+        FXCollections.sort(observableMovies, Comparator.comparing(Movie::getTitle).reversed());
     }
 
     @Override
@@ -92,18 +83,26 @@ public class HomeController implements Initializable {
         genreComboBox.setPromptText("Filter by Genre");
         genreComboBox.getItems().addAll(Movie.getAllGenres());
 
-        checkGenre();
-        checkSearch();
+        //Listener that checks for changes in the genreComboBox
+        genreComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            String searchText = searchField.getText().trim().toLowerCase();
+            filterByGenre(newValue, searchText);
+        });
 
-        //Sorts movies
+        //Listener that checks for changes in the searchField
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            String searchText = newValue.trim().toLowerCase();
+            searchMovies(searchText);
+        });
+
         sortBtn.setOnAction(actionEvent -> {
             if(sortBtn.getText().equals("Sort A-Z")) {
                 // sort observableMovies ascending
-                FXCollections.sort(observableMovies, Comparator.comparing(Movie::getTitle));
+                sort();
                 sortBtn.setText("Sort Z-A");
             } else {
                 // sort observableMovies descending
-                FXCollections.sort(observableMovies, Comparator.comparing(Movie::getTitle).reversed());
+                sortReverse();
                 sortBtn.setText("Sort A-Z");
             }
         });
