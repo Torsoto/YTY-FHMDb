@@ -90,7 +90,7 @@ public class HomeController implements Initializable {
         });
 
 
-        //sortiert die Filme auf- und absteigend
+        //sorts the movies
         sortBtn.setOnAction(actionEvent -> {
             if(sortBtn.getText().equals("Sort (asc)")) {
                 // sort observableMovies ascending
