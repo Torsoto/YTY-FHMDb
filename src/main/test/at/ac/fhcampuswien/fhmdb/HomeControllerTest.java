@@ -94,5 +94,18 @@ public class HomeControllerTest {
         assertTrue(controller.observableMovies.contains(controller.allMovies.get(1)));
         assertTrue(controller.observableMovies.contains(controller.allMovies.get(4)));
     }
+    @Test
+    public void testSortMoviesByTitle() {
+        controller.sort();
+        // Verify that observableMovies is sorted alphabetically by title
+        for (int i = 0; i < controller.observableMovies.size() - 1; i++) {
+            assertTrue(controller.observableMovies.get(i).getTitle().compareTo(controller.observableMovies.get(i + 1).getTitle()) <= 0);
+        }
 
+        controller.sortReverse();
+        // Verify that observableMovies is sorted in reverse alphabetical order by title
+        for (int i = 0; i < controller.observableMovies.size() - 1; i++) {
+            assertTrue(controller.observableMovies.get(i).getTitle().compareTo(controller.observableMovies.get(i + 1).getTitle()) >= 0);
+        }
+    }
 }
