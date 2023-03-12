@@ -1,6 +1,7 @@
 package at.ac.fhcampuswien.fhmdb;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -44,9 +45,30 @@ public class HomeControllerTest {
         assertTrue(controller.observableMovies.containsAll(filteredMovies));
 
         // Reset category and check if all movies are displayed
-        controller.resetCategory();
+        controller.resetCategory("");
         assertEquals(allMovies.size(), controller.observableMovies.size());
         assertTrue(controller.observableMovies.containsAll(allMovies));
+    }
+
+    @Test
+    public void testResetCategoryWithSearchQuery(){
+        // Add some movies to allMovies
+        controller.allMovies.clear();
+
+        controller.allMovies.add(new Movie("Movie 1","Description",new String[]{"ACTION", "DRAMA"}));
+        controller.allMovies.add(new Movie("Movie 2","Description",new String[]{"CRIME","DRAMA"}));
+        controller.allMovies.add(new Movie("Movie 3","Description",new String[]{"FANTASY"}));
+        controller.allMovies.add(new Movie("Movie 4","Description",new String[]{"ACTION"}));
+        controller.allMovies.add(new Movie("Movie 4","Description",new String[]{"SCI-FI"}));
+
+        controller.filterByGenreAndSearch("ACTION", "4");
+
+        assertEquals(1, controller.observableMovies.size());
+
+        controller.resetCategory("4");
+        assertEquals(2, controller.observableMovies.size());
+        assertTrue(controller.observableMovies.contains(allMovies.get(3)));
+        assertTrue(controller.observableMovies.contains(allMovies.get(4)));
     }
 
     @Test
@@ -133,5 +155,50 @@ public class HomeControllerTest {
         for (int i = 0; i < controller.observableMovies.size() - 1; i++) {
             assertTrue(controller.observableMovies.get(i).getTitle().compareTo(controller.observableMovies.get(i + 1).getTitle()) >= 0);
         }
+    }
+
+    @Test
+    public void testSortMoviesWithCategorySelected(){
+        controller.filterByGenreAndSearch("ACTION", "");
+
+        controller.sort();
+
+        List<Movie> sortedMovies = new ArrayList<>(controller.observableMovies);
+        sortedMovies.sort(Comparator.comparing(Movie::getTitle));
+        assertEquals(sortedMovies, controller.observableMovies);
+
+        controller.sortReverse();
+        sortedMovies.sort(Comparator.comparing(Movie::getTitle).reversed());
+        assertEquals(sortedMovies, controller.observableMovies);
+    }
+
+    @Test
+    public void testSortMoviesWithSearchQuery(){
+        controller.filterByGenreAndSearch(null, "The");
+
+        controller.sort();
+
+        List<Movie> sortedMovies = new ArrayList<>(controller.observableMovies);
+        sortedMovies.sort(Comparator.comparing(Movie::getTitle));
+        assertEquals(sortedMovies, controller.observableMovies);
+
+        controller.sortReverse();
+        sortedMovies.sort(Comparator.comparing(Movie::getTitle).reversed());
+        assertEquals(sortedMovies, controller.observableMovies);
+    }
+
+    @Test
+    public void testSortMoviesWithSearchQueryAndCategorySelected(){
+        controller.filterByGenreAndSearch("ACTION", "The");
+
+        controller.sort();
+
+        List<Movie> sortedMovies = new ArrayList<>(controller.observableMovies);
+        sortedMovies.sort(Comparator.comparing(Movie::getTitle));
+        assertEquals(sortedMovies, controller.observableMovies);
+
+        controller.sortReverse();
+        sortedMovies.sort(Comparator.comparing(Movie::getTitle).reversed());
+        assertEquals(sortedMovies, controller.observableMovies);
     }
 }

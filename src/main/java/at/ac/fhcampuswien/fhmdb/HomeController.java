@@ -37,11 +37,11 @@ public class HomeController implements Initializable {
 
     protected final ObservableList<Movie> observableMovies = FXCollections.observableArrayList();   // automatically updates corresponding UI elements when underlying data changes
 
-    public void resetCategory(){
+    public void resetCategory(String search){
         if (genreComboBox != null){
             genreComboBox.getSelectionModel().clearSelection();
         } else {
-            filterByGenreAndSearch(null, "");
+            filterByGenreAndSearch(null, search);
         }
     }
 
@@ -90,6 +90,10 @@ public class HomeController implements Initializable {
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             String searchText = newValue.trim().toLowerCase();
             searchMovies(searchText);
+        });
+
+        resetBtn.setOnAction(actionEvent -> {
+            resetCategory(searchField.getText().trim().toLowerCase());
         });
 
         sortBtn.setOnAction(actionEvent -> {
