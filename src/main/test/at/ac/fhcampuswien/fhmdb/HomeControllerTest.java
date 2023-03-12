@@ -1,5 +1,6 @@
 package at.ac.fhcampuswien.fhmdb;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -23,7 +24,26 @@ public class HomeControllerTest {
 
     @Test
     public void testResetCategory() {
+        // Loop through allMovies and filter by genre
+        List<Movie> filteredMovies = new ArrayList<>();
+        for (Movie movie : allMovies) {
+            for (String genre : movie.getGenre()) {
+                if (genre.equals("ACTION")) {
+                    filteredMovies.add(movie);
+                    break;
+                }
+            }
+        }
+
+        //Use Filter Method from homeController and look for the same genre as Loop before
         controller.filterByGenreAndSearch("ACTION", "");
+
+        // Check if the filtered list has the same size as the observable list in the controller
+        assertEquals(filteredMovies.size(), controller.observableMovies.size());
+        // Check if the filtered list contains all movies in the observable list in the controller
+        assertTrue(controller.observableMovies.containsAll(filteredMovies));
+
+        // Reset category and check if all movies are displayed
         controller.resetCategory();
         assertEquals(allMovies.size(), controller.observableMovies.size());
         assertTrue(controller.observableMovies.containsAll(allMovies));
@@ -53,9 +73,11 @@ public class HomeControllerTest {
     }
 
     @Test
-    public void testSearchBar(){
+    public void testSearchField(){
+        //Clear allMovies from this controller
         controller.allMovies.clear();
 
+        //add Dummy Movies so that we can test the searchField
         controller.allMovies.add(new Movie("ABC","Description",new String[]{"ACTION", "DRAMA"}));
         controller.allMovies.add(new Movie("DEF","Description",new String[]{"CRIME","DRAMA"}));
         controller.allMovies.add(new Movie("GHI","Description",new String[]{"FANTASY"}));
@@ -66,10 +88,12 @@ public class HomeControllerTest {
         controller.allMovies.add(new Movie("K","Description",new String[]{"FANTASY"}));
         controller.allMovies.add(new Movie("L","Description",new String[]{"FANTASY"}));
 
+        //Filter the movies through searchField ( genre = null -> we are only testing the searchField)
         controller.filterByGenreAndSearch(null, "JKL");
 
-        assertEquals(1, controller.observableMovies.size());
-        assertTrue(controller.observableMovies.contains(controller.allMovies.get(3)));
+        //observableMovies should onl display 1 Movie as only 1 Movie has the String "JKL" in their title/description
+        assertEquals(1, controller.observableMovies.size()); //same size
+        assertTrue(controller.observableMovies.contains(controller.allMovies.get(3))); //checks specific Movie
     }
 
     @Test
