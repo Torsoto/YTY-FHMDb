@@ -40,12 +40,12 @@ public class HomeController implements Initializable {
     public void resetCategory(){
         if (genreComboBox != null){
             genreComboBox.getSelectionModel().clearSelection();
+        } else {
+            filterByGenreAndSearch(null, "");
         }
-        observableMovies.clear();
-        observableMovies.addAll(allMovies);
     }
 
-    public void filterByGenre(String selectedGenre, String searchText){
+    public void filterByGenreAndSearch(String selectedGenre, String searchText){
         observableMovies.clear();
         for (Movie movie : allMovies) {
             if ((selectedGenre == null || Arrays.asList(movie.getGenre()).contains(selectedGenre))
@@ -58,7 +58,7 @@ public class HomeController implements Initializable {
 
     public void searchMovies(String searchText){
         String selectedGenre = genreComboBox.getSelectionModel().getSelectedItem();
-        filterByGenre(selectedGenre, searchText);
+        filterByGenreAndSearch(selectedGenre, searchText);
     }
 
     public void sort(){
@@ -83,7 +83,7 @@ public class HomeController implements Initializable {
         //Listener that checks for changes in the genreComboBox
         genreComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             String searchText = searchField.getText().trim().toLowerCase();
-            filterByGenre(newValue, searchText);
+            filterByGenreAndSearch(newValue, searchText);
         });
 
         //Listener that checks for changes in the searchField

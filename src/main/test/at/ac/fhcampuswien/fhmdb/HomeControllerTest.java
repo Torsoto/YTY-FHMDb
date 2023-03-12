@@ -23,7 +23,7 @@ public class HomeControllerTest {
 
     @Test
     public void testResetCategory() {
-        controller.observableMovies.clear();
+        controller.filterByGenreAndSearch("ACTION", "");
         controller.resetCategory();
         assertEquals(allMovies.size(), controller.observableMovies.size());
         assertTrue(controller.observableMovies.containsAll(allMovies));
@@ -42,9 +42,12 @@ public class HomeControllerTest {
         controller.allMovies.add(new Movie("Movie 6","Description",new String[]{"THRILLER"}));
 
         // Filter by "Action"
-        controller.filterByGenre("ACTION", "");
-        // Check that observableMovies now only contains "Movie 1" and "Movie 4"
+        controller.filterByGenreAndSearch("ACTION", "");
+
+        // Check how many Movies are being displayed => has to equal 2 because only 2 Movies have the ACTION genre
         assertEquals(2, controller.observableMovies.size());
+
+        // Check that observableMovies now only contains "Movie 1" and "Movie 4"
         assertTrue(controller.observableMovies.contains(controller.allMovies.get(0)));
         assertTrue(controller.observableMovies.contains(controller.allMovies.get(3)));
     }
@@ -63,8 +66,7 @@ public class HomeControllerTest {
         controller.allMovies.add(new Movie("K","Description",new String[]{"FANTASY"}));
         controller.allMovies.add(new Movie("L","Description",new String[]{"FANTASY"}));
 
-
-        controller.filterByGenre(null, "JKL");
+        controller.filterByGenreAndSearch(null, "JKL");
 
         assertEquals(1, controller.observableMovies.size());
         assertTrue(controller.observableMovies.contains(controller.allMovies.get(3)));
@@ -85,10 +87,10 @@ public class HomeControllerTest {
         controller.allMovies.add(new Movie("Jurassic Park","Description",new String[]{"ADVENTURE", "SCI-FI", "ACTION"}));
         controller.allMovies.add(new Movie("Forrest Gump","Description",new String[]{"DRAMA", "ROMANCE"}));
 
-        // Search for "The"
-        controller.filterByGenre("ACTION", "The");
+        // Genre selected + Search Query
+        controller.filterByGenreAndSearch("ACTION", "The");
 
-        // Check that observableMovies now only contains "The Dark Knight" and "The Lord of the Rings: The Fellowship of the Ring"
+        // Check that observableMovies now only contains "The Dark Knight","Inception" and "The Lord of the Rings: The Fellowship of the Ring"
         assertEquals(3, controller.observableMovies.size());
         assertTrue(controller.observableMovies.contains(controller.allMovies.get(0)));
         assertTrue(controller.observableMovies.contains(controller.allMovies.get(1)));

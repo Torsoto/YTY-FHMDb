@@ -2,6 +2,7 @@ package at.ac.fhcampuswien.fhmdb.models;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 public class Movie {
@@ -25,7 +26,7 @@ public class Movie {
                 validGenres.add(g);
             }
         }
-        this.genre = validGenres.toArray(new String[validGenres.size()]);
+        this.genre = validGenres.toArray(new String[0]);
     }
 
     public  Movie(String title, String description){
@@ -53,7 +54,6 @@ public class Movie {
         Movie INCEPTION = new Movie("Inception", "A skilled thief is hired to plant an idea into the mind of a corporate heir. As he and his team delve deeper into the man's subconscious, they must face dangerous adversaries and navigate complex layers of reality.", new String[]{"ACTION", "THRILLER", "SCI-FI"});
         Movie PULPFICTION = new Movie("Pulp Fiction", "The lives of two mob hitmen, a boxer, a gangster's wife, and a pair of diner bandits intertwine in four tales of violence and redemption.", new String[]{"CRIME", "DRAMA"});
         Movie FORRESTGUMP = new Movie("Forrest Gump", "Forrest Gump, a simple man with a low IQ, leads an extraordinary life and becomes a witness to and participant in some of the defining moments of the 20th century.", new String[]{"DRAMA", "ROMANCE", "COMEDY"});
-        List<Movie> movies = new ArrayList<>();
         Movie INTERSTELLAR = new Movie("Interstellar", "A group of explorers embark on a mission to save humanity from a dying Earth by traveling through a wormhole to find a new habitable planet in another galaxy.", new String[]{"SCI-FI", "DRAMA"});
         Movie SHUTTERISLAND = new Movie("Shutter Island", "In 1954, U.S. Marshal Teddy Daniels investigates the disappearance of a murderess from an asylum on Shutter Island and uncovers a web of deceit.", new String[]{"MYSTERY", "THRILLER"});
         Movie TAXIDRIVER = new Movie("Taxi Driver", "A mentally unstable Vietnam War veteran works as a nighttime taxi driver in New York City, where the perceived decadence and sleaze fuels his urge for violent action.", new String[]{"DRAMA", "CRIME"});
@@ -62,8 +62,8 @@ public class Movie {
         Movie KUNGFUPANDA3 = new Movie("Kung Fu Panda 3", "Po reunites with his long-lost father and discovers a secret village of pandas, but an ancient and powerful villain threatens to destroy their peaceful existence.", new String[]{"ANIMATION", "ACTION", "COMEDY"});
         Movie PARASITE = new Movie("Parasite", "A poor family scheming to become the servants of a wealthy family gradually infiltrates their household, but an unexpected incident sets off a series of events that expose their greed and deception.", new String[]{"THRILLER", "DRAMA"});
 
-        Movie[] movieArray = {SHAWSHANK, LOTR1, LOTR2, LOTR3, INCEPTION, PULPFICTION, FORRESTGUMP, INTERSTELLAR, SHUTTERISLAND, TAXIDRIVER, KUNGFUPANDA1, KUNGFUPANDA2, KUNGFUPANDA3};
-        Arrays.sort(movieArray, (m1, m2) -> m1.getTitle().compareTo(m2.getTitle()));
+        Movie[] movieArray = {SHAWSHANK, LOTR1, LOTR2, LOTR3, INCEPTION, PULPFICTION, FORRESTGUMP, INTERSTELLAR, SHUTTERISLAND, TAXIDRIVER, KUNGFUPANDA1, KUNGFUPANDA2, KUNGFUPANDA3, PARASITE};
+        Arrays.sort(movieArray, Comparator.comparing(Movie::getTitle));
         return new ArrayList<>(Arrays.asList(movieArray));
     }
 
