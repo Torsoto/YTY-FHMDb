@@ -47,6 +47,8 @@ public class Movie {
     }
 
     public static List<Movie> initializeMovies(){
+        //TODO Implement MovieAPI HERE INSTEAD OF STATIC MOVIES
+
         Movie SHAWSHANK = new Movie("The Shawshank Redemption", "A powerful story of hope, friendship, and the human spirit set against the backdrop of a brutal prison system.",new String[]{"DRAMA","CRIME"});
         Movie LOTR1 = new Movie("The Lord of the Rings: The Fellowship of the Ring", "Frodo must destroy a powerful ring with the help of a fellowship on a dangerous journey", new String[]{"FANTASY","ADVENTURE"});
         Movie LOTR2 = new Movie("The Lord of the Rings: The Two Towers", "The fellowship is split and faces new challenges, while Frodo and his Companion Sam are pursued by Gollum", new String[]{"FANTASY","ADVENTURE"});
