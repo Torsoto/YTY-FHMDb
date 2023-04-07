@@ -8,8 +8,11 @@ import java.util.List;
 public class Movie {
     private final String title;
     private String description;
-
     private String[] genre;
+    private String director;
+    private int releaseYear;
+    private List<String> mainCast;
+
 
     private static final String[] genres = {"ACTION", "ADVENTURE", "ANIMATION", "BIOGRAPHY", "COMEDY",
             "CRIME", "DRAMA", "DOCUMENTARY", "FAMILY", "FANTASY", "HISTORY", "HORROR",
@@ -76,5 +79,17 @@ public class Movie {
 
     public static String[] getAllGenres() {
         return genres;
+    }
+
+    public String getDirector() {
+        return director;
+    }
+
+    public int getReleaseYear() {
+        return releaseYear;
+    }
+
+    public List<String> getMainCast() {
+        return mainCast;
     }
 }
