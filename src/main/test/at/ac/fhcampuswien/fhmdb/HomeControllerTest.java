@@ -213,5 +213,7 @@ public class HomeControllerTest {
             sortedMovies.sort(Comparator.comparing(Movie::getTitle).reversed());
             assertEquals(sortedMovies, controller.observableMovies);
         }
+
+        //TODO: WRITE TESTS FOR THE 4 ADDED FUNCTIONS
     }
 }
