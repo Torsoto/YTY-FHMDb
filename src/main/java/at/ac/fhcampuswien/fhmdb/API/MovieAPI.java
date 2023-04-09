@@ -7,10 +7,8 @@ import okhttp3.*;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class MovieAPI {
     OkHttpClient client = new OkHttpClient();
@@ -18,7 +16,7 @@ public class MovieAPI {
 
     Request request = new Request.Builder()
             .url(baseURL)
-            .addHeader("YTY-Agent", "http.agent")
+            .addHeader("User-Agent", "http.agent")
             .build();
     Call call = client.newCall(request);
     Response response;
@@ -31,6 +29,7 @@ public class MovieAPI {
         }
     }
 
+    //Builds URL to get specific data from API
     public String buildURL(String query, String genre, Integer releaseYear, Double ratingFrom) {
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(baseURL)).newBuilder();
 
@@ -82,29 +81,56 @@ public class MovieAPI {
     }
 
     public List<Movie> fetchMovies(String query, String genre, Integer releaseYear, Double ratingFrom) {
+        // Build the URL using the search parameters (query, genre, releaseYear, ratingFrom)
         String url = buildURL(query, genre, releaseYear, ratingFrom);
+
+        // Create a request object with the URL and a custom User-Agent header
         Request request = new Request.Builder()
                 .url(url)
                 .addHeader("User-Agent", "http.agent")
                 .build();
+
+        // Execute the request using OkHttpClient (client) and retrieve the response
         try (Response response = client.newCall(request).execute()) {
+            // Check if the response is successful
             if (response.isSuccessful()) {
-                Gson gson = new Gson();
+                //use custom deserializer
+                Gson gson = getGsonWithMovieDeserializer();
                 Type movieListType = new TypeToken<List<Movie>>() {
                 }.getType();
-                List<Movie> movies = gson.fromJson(response.body().charStream(), movieListType);
-
-                // Filter the movie list based on the provided parameters
-                return movies.stream()
-                        .filter(movie -> query == null || movie.getTitle().toLowerCase().contains(query.toLowerCase()))
-                        .filter(movie -> genre == null || Arrays.stream(movie.getGenre()).anyMatch(g -> g.equalsIgnoreCase(genre)))
-                        //.filter(movie -> releaseYear == null || movie.getReleaseYear().equals(releaseYear))
-                        //.filter(movie -> ratingFrom == null || movie.getRating() >= ratingFrom)
-                        .collect(Collectors.toList());
+                return gson.fromJson(response.body().charStream(), movieListType);
             } else {
+                // If the response is not successful, throw an IOException with an error message
                 throw new IOException("Unexpected response: " + response);
             }
         } catch (IOException e) {
+            // If an exception occurs, wrap it in a RuntimeException and rethrow
+            throw new RuntimeException(e);
+        }
+    }
+    // Fetches a movie by its unique ID
+    public Movie fetchMovieById(String movieId) {
+        // Build the URL for fetching the movie by ID
+        String url = buildMovieByIdURL(movieId);
+        // Create a request object with the URL and User-Agent header
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("User-Agent", "http.agent")
+                .build();
+        // Execute the request and process the response
+        try (Response response = client.newCall(request).execute()) {
+            // Check if the response is successful
+            if (response.isSuccessful()) {
+                // Get a Gson object with the registered Movie deserializer
+                Gson gson = getGsonWithMovieDeserializer();
+                // Deserialize the response body into a Movie object
+                return gson.fromJson(response.body().charStream(), Movie.class);
+            } else {
+                // If the response is not successful, throw an IOException
+                throw new IOException("Unexpected response: " + response);
+            }
+        } catch (IOException e) {
+            // If an exception occurs, wrap it in a RuntimeException and rethrow
             throw new RuntimeException(e);
         }
     }

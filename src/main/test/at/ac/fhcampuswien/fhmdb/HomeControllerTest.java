@@ -60,11 +60,11 @@ public class HomeControllerTest {
             // Add some movies to allMovies
             controller.allMovies.clear();
 
-            controller.allMovies.add(new Movie("Movie 1","Description",new String[]{"ACTION", "DRAMA"}));
-            controller.allMovies.add(new Movie("Movie 2","Description",new String[]{"CRIME","DRAMA"}));
-            controller.allMovies.add(new Movie("Movie 3","Description",new String[]{"FANTASY"}));
-            controller.allMovies.add(new Movie("Movie 4","Description",new String[]{"ACTION"}));
-            controller.allMovies.add(new Movie("Movie 4","Description",new String[]{"SCI-FI"}));
+            controller.allMovies.add(new Movie("Movie 1","Description",new String[]{"ACTION", "DRAMA"},0,0,null));
+            controller.allMovies.add(new Movie("Movie 2","Description",new String[]{"CRIME","DRAMA"},0,0,null));
+            controller.allMovies.add(new Movie("Movie 3","Description",new String[]{"FANTASY"},0,0,null));
+            controller.allMovies.add(new Movie("Movie 4","Description",new String[]{"ACTION"},0,0,null));
+            controller.allMovies.add(new Movie("Movie 4","Description",new String[]{"SCI-FI"},0,0,null));
 
             controller.filterByGenreAndSearch("ACTION", "4");
 
@@ -81,12 +81,12 @@ public class HomeControllerTest {
             // Add some movies to allMovies
             controller.allMovies.clear();
 
-            controller.allMovies.add(new Movie("Movie 1","Description",new String[]{"ACTION", "DRAMA"}));
-            controller.allMovies.add(new Movie("Movie 2","Description",new String[]{"CRIME","DRAMA"}));
-            controller.allMovies.add(new Movie("Movie 3","Description",new String[]{"FANTASY"}));
-            controller.allMovies.add(new Movie("Movie 4","Description",new String[]{"ACTION"}));
-            controller.allMovies.add(new Movie("Movie 5","Description",new String[]{"SCI-FI"}));
-            controller.allMovies.add(new Movie("Movie 6","Description",new String[]{"THRILLER"}));
+            controller.allMovies.add(new Movie("Movie 1","Description",new String[]{"ACTION", "DRAMA"},0,0,null));
+            controller.allMovies.add(new Movie("Movie 2","Description",new String[]{"CRIME","DRAMA"},0,0,null));
+            controller.allMovies.add(new Movie("Movie 3","Description",new String[]{"FANTASY"},0,0,null));
+            controller.allMovies.add(new Movie("Movie 4","Description",new String[]{"ACTION"},0,0,null));
+            controller.allMovies.add(new Movie("Movie 5","Description",new String[]{"SCI-FI"},0,0,null));
+            controller.allMovies.add(new Movie("Movie 6","Description",new String[]{"THRILLER"},0,0,null));
 
             // Filter by "Action"
             controller.filterByGenreAndSearch("ACTION", "");
@@ -105,15 +105,15 @@ public class HomeControllerTest {
             controller.allMovies.clear();
 
             //add Dummy Movies so that we can test the searchField
-            controller.allMovies.add(new Movie("ABC","Description",new String[]{"ACTION", "DRAMA"}));
-            controller.allMovies.add(new Movie("DEF","Description",new String[]{"CRIME","DRAMA"}));
-            controller.allMovies.add(new Movie("GHI","Description",new String[]{"FANTASY"}));
-            controller.allMovies.add(new Movie("JKL","Description",new String[]{"ACTION", "DRAMA"}));
-            controller.allMovies.add(new Movie("MNO","Description",new String[]{"CRIME","DRAMA"}));
-            controller.allMovies.add(new Movie("PQR","Description",new String[]{"FANTASY"}));
-            controller.allMovies.add(new Movie("J","Description",new String[]{"FANTASY"}));
-            controller.allMovies.add(new Movie("K","Description",new String[]{"FANTASY"}));
-            controller.allMovies.add(new Movie("L","Description",new String[]{"FANTASY"}));
+            controller.allMovies.add(new Movie("ABC","Description",new String[]{"ACTION", "DRAMA"},0,0,null));
+            controller.allMovies.add(new Movie("DEF","Description",new String[]{"CRIME","DRAMA"},0,0,null));
+            controller.allMovies.add(new Movie("GHI","Description",new String[]{"FANTASY"},0,0,null));
+            controller.allMovies.add(new Movie("JKL","Description",new String[]{"ACTION", "DRAMA"},0,0,null));
+            controller.allMovies.add(new Movie("MNO","Description",new String[]{"CRIME","DRAMA"},0,0,null));
+            controller.allMovies.add(new Movie("PQR","Description",new String[]{"FANTASY"},0,0,null));
+            controller.allMovies.add(new Movie("J","Description",new String[]{"FANTASY"},0,0,null));
+            controller.allMovies.add(new Movie("K","Description",new String[]{"FANTASY"},0,0,null));
+            controller.allMovies.add(new Movie("L","Description",new String[]{"FANTASY"},0,0,null));
 
             //Filter the movies through searchField ( genre = null -> we are only testing the searchField)
             controller.filterByGenreAndSearch(null, "JKL");
@@ -128,15 +128,15 @@ public class HomeControllerTest {
             // Add some movies to allMovies
             controller.allMovies.clear();
 
-            controller.allMovies.add(new Movie("The Dark Knight","Description",new String[]{"ACTION", "CRIME", "DRAMA"}));
-            controller.allMovies.add(new Movie("Inception","The Description",new String[]{"ACTION", "ADVENTURE", "SCI-FI"}));
-            controller.allMovies.add(new Movie("The Shawshank Redemption","Description",new String[]{"DRAMA"}));
-            controller.allMovies.add(new Movie("The Godfather","Description",new String[]{"CRIME", "DRAMA"}));
-            controller.allMovies.add(new Movie("The Lord of the Rings: The Fellowship of the Ring","Description",new String[]{"ACTION", "ADVENTURE", "FANTASY"}));
-            controller.allMovies.add(new Movie("Matrix","Description",new String[]{"ACTION", "SCI-FI"}));
-            controller.allMovies.add(new Movie("The Silence of the Lambs","Description",new String[]{"CRIME", "DRAMA", "THRILLER"}));
-            controller.allMovies.add(new Movie("Jurassic Park","Description",new String[]{"ADVENTURE", "SCI-FI", "ACTION"}));
-            controller.allMovies.add(new Movie("Forrest Gump","Description",new String[]{"DRAMA", "ROMANCE"}));
+            controller.allMovies.add(new Movie("The Dark Knight","Description",new String[]{"ACTION", "CRIME", "DRAMA"},0,0,null));
+            controller.allMovies.add(new Movie("Inception","The Description",new String[]{"ACTION", "ADVENTURE", "SCI-FI"},0,0,null));
+            controller.allMovies.add(new Movie("The Shawshank Redemption","Description",new String[]{"DRAMA"},0,0,null));
+            controller.allMovies.add(new Movie("The Godfather","Description",new String[]{"CRIME", "DRAMA"},0,0,null));
+            controller.allMovies.add(new Movie("The Lord of the Rings: The Fellowship of the Ring","Description",new String[]{"ACTION", "ADVENTURE", "FANTASY"},0,0,null));
+            controller.allMovies.add(new Movie("Matrix","Description",new String[]{"ACTION", "SCI-FI"},0,0,null));
+            controller.allMovies.add(new Movie("The Silence of the Lambs","Description",new String[]{"CRIME", "DRAMA", "THRILLER"},0,0,null));
+            controller.allMovies.add(new Movie("Jurassic Park","Description",new String[]{"ADVENTURE", "SCI-FI", "ACTION"},0,0,null));
+            controller.allMovies.add(new Movie("Forrest Gump","Description",new String[]{"DRAMA", "ROMANCE"},0,0,null));
 
             // Genre selected + Search Query
             controller.filterByGenreAndSearch("ACTION", "The");
