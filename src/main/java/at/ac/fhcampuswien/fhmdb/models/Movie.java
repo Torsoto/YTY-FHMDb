@@ -25,7 +25,7 @@ public class Movie {
 
     public static List<Movie> initializeMovies(){
         MovieAPI movieAPI = new MovieAPI();
-        return movieAPI.fetchMovies(null, null, null, null);
+        return movieAPI.fetchMovies(null, null, null, null, false);
     }
 
     //Constructor with every possible value from JSON

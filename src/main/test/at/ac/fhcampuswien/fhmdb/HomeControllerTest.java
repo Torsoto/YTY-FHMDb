@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import at.ac.fhcampuswien.fhmdb.API.MovieAPI;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -17,10 +18,12 @@ public class HomeControllerTest {
 
     private HomeController controller;
     private List<Movie> allMovies;
+    private MovieAPI api;
 
     @BeforeEach
     public void setUp() {
         controller = new HomeController();
+        api = new MovieAPI();
         allMovies = Movie.initializeMovies();
         controller.allMovies = allMovies;
     }
@@ -214,6 +217,21 @@ public class HomeControllerTest {
             assertEquals(sortedMovies, controller.observableMovies);
         }
 
-        //TODO: WRITE TESTS FOR THE 4 ADDED FUNCTIONS
+        @Test
+        public void should_return_most_popular_Actor(){
+            String all = controller.getMostPopularActor(api.fetchMovies(null,null,null,null,false));
+            String drama = controller.getMostPopularActor(api.fetchMovies(null,"DRAMA",null,null,false));
+
+
+            assertEquals(drama, "Leonardo DiCaprio");
+            assertEquals(all, "Tom Hanks");
+        }
+
+        @Test
+        public void should_return_longest_movie_Title(){
+            int all = controller.getLongestMovieTitle(api.fetchMovies(null,null,null,null,false));
+
+            assertEquals(all,46);
+        }
     }
 }

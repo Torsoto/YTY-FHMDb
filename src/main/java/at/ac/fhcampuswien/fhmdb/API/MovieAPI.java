@@ -54,9 +54,8 @@ public class MovieAPI {
         return "http://prog2.fh-campuswien.ac.at/movies/" + movieId;
     }
 
-    //Custom Deserializer to get Movie Object as we had before
 // Creates a Gson object with the registered Movie deserializer
-    private Gson getGsonWithMovieDeserializer() {
+    private Gson getGsonWithMovieDeserializerForUI() {
         // Instantiate a GsonBuilder
         GsonBuilder gsonBuilder = new GsonBuilder();
         // Register the custom Movie deserializer with the GsonBuilder
@@ -80,7 +79,39 @@ public class MovieAPI {
         return gsonBuilder.create();
     }
 
-    public List<Movie> fetchMovies(String query, String genre, Integer releaseYear, Double ratingFrom) {
+    private Gson getGsonWithMovieDeserializer() {
+        // Instantiate a GsonBuilder
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        // Register the custom Movie deserializer with the GsonBuilder
+        gsonBuilder.registerTypeAdapter(Movie.class, (JsonDeserializer<Movie>) (json, typeOfT, context) -> {
+            // Get the JSON object representing the movie
+            JsonObject jsonObject = json.getAsJsonObject();
+
+            // Extract fields from the JSON object
+            String id = jsonObject.get("id").getAsString();
+            String title = jsonObject.get("title").getAsString();
+            String description = jsonObject.get("description").getAsString();
+            JsonArray genreArray = jsonObject.getAsJsonArray("genres");
+            String[] genre = new Gson().fromJson(genreArray, String[].class);
+            int releaseYear = jsonObject.get("releaseYear").getAsInt();
+            String imgURL = jsonObject.get("imgUrl").getAsString();
+            int lengthInMinutes = jsonObject.get("lengthInMinutes").getAsInt();
+            JsonArray directorsArray = jsonObject.getAsJsonArray("directors");
+            String director = new Gson().fromJson(directorsArray.get(0), String.class);
+            JsonArray writersArray = jsonObject.getAsJsonArray("writers");
+            List<String> writers = new Gson().fromJson(writersArray, new TypeToken<List<String>>() {}.getType());
+            JsonArray mainCastArray = jsonObject.getAsJsonArray("mainCast");
+            List<String> mainCast = new Gson().fromJson(mainCastArray, new TypeToken<List<String>>() {}.getType());
+            double rating = jsonObject.get("rating").getAsDouble();
+
+            // Create and return a new Movie object with the extracted fields
+            return new Movie(title, description, genre, rating, releaseYear, mainCast, director, id, imgURL, writers, lengthInMinutes);
+        });
+        // Build and return the Gson object
+        return gsonBuilder.create();
+    }
+
+    public List<Movie> fetchMovies(String query, String genre, Integer releaseYear, Double ratingFrom, boolean UI) {
         // Build the URL using the search parameters (query, genre, releaseYear, ratingFrom)
         String url = buildURL(query, genre, releaseYear, ratingFrom);
 
@@ -95,7 +126,13 @@ public class MovieAPI {
             // Check if the response is successful
             if (response.isSuccessful()) {
                 //use custom deserializer
-                Gson gson = getGsonWithMovieDeserializer();
+                Gson gson;
+                //depending on what constructor user wants to use choose different deserializer
+                if (UI){
+                    gson = getGsonWithMovieDeserializerForUI();
+                }else {
+                    gson = getGsonWithMovieDeserializer();
+                }
                 Type movieListType = new TypeToken<List<Movie>>() {
                 }.getType();
                 return gson.fromJson(response.body().charStream(), movieListType);
@@ -109,7 +146,7 @@ public class MovieAPI {
         }
     }
     // Fetches a movie by its unique ID
-    public Movie fetchMovieById(String movieId) {
+    public Movie fetchMovieById(String movieId, boolean UI) {
         // Build the URL for fetching the movie by ID
         String url = buildMovieByIdURL(movieId);
         // Create a request object with the URL and User-Agent header
@@ -121,8 +158,13 @@ public class MovieAPI {
         try (Response response = client.newCall(request).execute()) {
             // Check if the response is successful
             if (response.isSuccessful()) {
-                // Get a Gson object with the registered Movie deserializer
-                Gson gson = getGsonWithMovieDeserializer();
+                Gson gson;
+                //depending on what constructor user wants to use choose different deserializer
+                if (UI){
+                    gson = getGsonWithMovieDeserializerForUI();
+                }else {
+                    gson = getGsonWithMovieDeserializer();
+                }
                 // Deserialize the response body into a Movie object
                 return gson.fromJson(response.body().charStream(), Movie.class);
             } else {

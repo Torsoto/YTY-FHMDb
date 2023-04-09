@@ -90,9 +90,7 @@ public class HomeController implements Initializable {
             searchMovies(searchText);
         });
 
-        resetBtn.setOnAction(actionEvent -> {
-            resetCategory(searchField.getText().trim().toLowerCase());
-        });
+        resetBtn.setOnAction(actionEvent -> resetCategory(searchField.getText().trim().toLowerCase()));
 
         sortBtn.setOnAction(actionEvent -> {
             if(sortBtn.getText().equals("Sort A-Z")) {
@@ -108,7 +106,6 @@ public class HomeController implements Initializable {
 
     }
 
-    //TODO: IMPLEMENT API
     //returns the person who appears most often in the mainCast of the passed movies
     String getMostPopularActor(List<Movie> movies) {
         Map<String, Long> actorsCount = movies.stream()
@@ -128,7 +125,6 @@ public class HomeController implements Initializable {
                 .max()
                 .orElse(0);
     }
-
     //return the number of movies by a certain director
     long countMoviesFrom(List<Movie> movies, String director) {
         return movies.stream()
