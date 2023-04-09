@@ -1,7 +1,7 @@
 package at.ac.fhcampuswien.fhmdb.API;
 
 import at.ac.fhcampuswien.fhmdb.models.Movie;
-import com.google.gson.Gson;
+import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import okhttp3.*;
 
@@ -48,6 +48,37 @@ public class MovieAPI {
         }
 
         return urlBuilder.build().toString();
+    }
+
+    //Builds URL by using ID
+    public String buildMovieByIdURL(String movieId) {
+        return "http://prog2.fh-campuswien.ac.at/movies/" + movieId;
+    }
+
+    //Custom Deserializer to get Movie Object as we had before
+// Creates a Gson object with the registered Movie deserializer
+    private Gson getGsonWithMovieDeserializer() {
+        // Instantiate a GsonBuilder
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        // Register the custom Movie deserializer with the GsonBuilder
+        gsonBuilder.registerTypeAdapter(Movie.class, (JsonDeserializer<Movie>) (json, typeOfT, context) -> {
+            // Get the JSON object representing the movie
+            JsonObject jsonObject = json.getAsJsonObject();
+
+            // Extract fields from the JSON object
+            String title = jsonObject.get("title").getAsString();
+            String description = jsonObject.get("description").getAsString();
+            JsonArray genreArray = jsonObject.getAsJsonArray("genres");
+            String[] genre = new Gson().fromJson(genreArray, String[].class);
+            int releaseYear = jsonObject.get("releaseYear").getAsInt();
+            String imgURL = jsonObject.get("imgUrl").getAsString();
+            double rating = jsonObject.get("rating").getAsDouble();
+
+            // Create and return a new Movie object with the extracted fields
+            return new Movie(title, description, genre, rating, releaseYear, imgURL);
+        });
+        // Build and return the Gson object
+        return gsonBuilder.create();
     }
 
     public List<Movie> fetchMovies(String query, String genre, Integer releaseYear, Double ratingFrom) {
