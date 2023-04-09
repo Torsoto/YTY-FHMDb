@@ -1,6 +1,7 @@
 package at.ac.fhcampuswien.fhmdb;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
@@ -250,8 +251,30 @@ public class HomeControllerTest {
         }
 
         @Test
-        public void should_return_movies_between_year_span(){
+        public void should_return_movies_between_year_span() {
+            // create some test movies
+            List<String> mainCast1 = Arrays.asList("Actor1", "Actor2");
+            List<String> mainCast2 = Arrays.asList("Actor3", "Actor4");
+            List<String> mainCast3 = Arrays.asList("Actor5", "Actor6");
+            List<String> mainCast4 = Arrays.asList("Actor7", "Actor8");
 
+            Movie movie1 = new Movie("Movie1", "Description1", new String[]{"Genre1"}, 8.0, 2000, mainCast1, "Director1", "ID1", "URL1", Arrays.asList("Writer1"), 120);
+            Movie movie2 = new Movie("Movie2", "Description2", new String[]{"Genre2"}, 7.5, 2010, mainCast2, "Director2", "ID2", "URL2", Arrays.asList("Writer2"), 110);
+            Movie movie3 = new Movie("Movie3", "Description3", new String[]{"Genre1", "Genre2"}, 9.0, 2015, mainCast3, "Director3", "ID3", "URL3", Arrays.asList("Writer3"), 130);
+            Movie movie4 = new Movie("Movie4", "Description4", new String[]{"Genre3"}, 6.5, 1999, mainCast4, "Director4", "ID4", "URL4", Arrays.asList("Writer4"), 100);
+
+            // create a list of movies to test
+            List<Movie> movieList = new ArrayList<>(Arrays.asList(movie1, movie2, movie3, movie4));
+
+            // get the movies between 2000 and 2015
+            List<Movie> result = controller.getMoviesBetweenYears(movieList, 2000, 2015);
+
+            // check that the result contains the correct movies in the correct order
+            assertEquals(3, result.size());
+            assertEquals("Movie1", result.get(0).getTitle());
+            assertEquals("Movie2", result.get(1).getTitle());
+            assertEquals("Movie3", result.get(2).getTitle());
         }
+
     }
 }
