@@ -216,7 +216,11 @@ public class HomeControllerTest {
             sortedMovies.sort(Comparator.comparing(Movie::getTitle).reversed());
             assertEquals(sortedMovies, controller.observableMovies);
         }
+    }
 
+    @Nested
+    @DisplayName("Stream Tests")
+    public class StreamTests{
         @Test
         public void should_return_most_popular_Actor(){
             String all = controller.getMostPopularActor(api.fetchMovies(null,null,null,null,false));
@@ -232,6 +236,22 @@ public class HomeControllerTest {
             int all = controller.getLongestMovieTitle(api.fetchMovies(null,null,null,null,false));
 
             assertEquals(all,46);
+        }
+
+        @Test
+        public void should_return_movieCount_from_Director(){
+            long d1 = controller.countMoviesFrom(api.fetchMovies(null,null,null,null,false),"Christopher Nolan");
+            long d2 = controller.countMoviesFrom(api.fetchMovies(null,null,null,null,false),"Quentin Tarantino");
+            long d3 = controller.countMoviesFrom(api.fetchMovies(null,null,null,null,false),"Martin Scorsese");
+
+            assertEquals(2, d1);
+            assertEquals(3, d2);
+            assertEquals(2, d3);
+        }
+
+        @Test
+        public void should_return_movies_between_year_span(){
+
         }
     }
 }
