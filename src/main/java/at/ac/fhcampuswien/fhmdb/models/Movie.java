@@ -6,10 +6,10 @@ import java.util.List;
 
 public class Movie {
     private final String title;
-    private String description;
-    private String[] genre;
+    private final String description;
+    private final String[] genre;
     private String director;
-    private int releaseYear;
+    private final int releaseYear;
     private List<String> mainCast;
     private double rating;
     private String ID;

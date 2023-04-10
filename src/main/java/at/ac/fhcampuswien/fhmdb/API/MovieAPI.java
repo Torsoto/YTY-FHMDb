@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class MovieAPI {
-    private OkHttpClient client = new OkHttpClient();
+    private final OkHttpClient client = new OkHttpClient();
 
     private Gson createGson(JsonDeserializer<Movie> movieDeserializer) {
         return new GsonBuilder()
