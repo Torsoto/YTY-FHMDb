@@ -60,14 +60,17 @@ public class HomeController implements Initializable {
         if (selectedRating != null) {
             ratingFrom = Double.parseDouble(selectedRating);
         }
+        filtering(searchText, selectedGenre, releaseYear, ratingFrom, true);
+        sort();
+        sortBtn.setText("Sort Z-A");
+    }
 
+    public void filtering(String searchText, String selectedGenre, Integer releaseYear, Double ratingFrom, boolean UI){
         MovieAPI API = new MovieAPI();
-        allMovies = API.fetchMovies(searchText, selectedGenre, releaseYear, ratingFrom, true);
+        allMovies = API.fetchMovies(searchText, selectedGenre, releaseYear, ratingFrom, UI);
 
         observableMovies.clear();
         observableMovies.addAll(allMovies);
-        sort();
-        sortBtn.setText("Sort Z-A");
     }
 
     public void sort(){

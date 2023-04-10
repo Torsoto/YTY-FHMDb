@@ -1,5 +1,6 @@
 package at.ac.fhcampuswien.fhmdb;
 
+import java.util.Arrays;
 import java.util.List;
 
 import at.ac.fhcampuswien.fhmdb.API.MovieAPI;
@@ -29,7 +30,83 @@ public class HomeControllerTest {
     @Nested
     @DisplayName("Filtering Tests")
     class FilteringTests {
+        @Test
+        void testFiltering_withSearchText() {
+            controller.filtering("Lord", null, null, null, true);
 
+            for (Movie movie : controller.allMovies){
+                boolean found = movie.getTitle().contains("Lord");
+                assertTrue(found);
+            }
+        }
+
+        @Test
+        public void should_filter_by_selected_genre() {
+            String selectedGenre = "COMEDY";
+            controller.filtering(null, selectedGenre, null, null, true);
+            // Verify that all movies are of the selected genre
+            //controller.allMovies.add(new Movie("test", "test", new String[]{"DRAMA"}, 5.5, 2001, null)); <- add dummy movie after filtering -> test should fail
+            for (Movie movie : controller.allMovies) {
+                boolean found = false;
+                for (String genre : movie.getGenre()) {
+                    if (genre.equals(selectedGenre)) {
+                        found = true;
+                        break;
+                    }
+                }
+                assertTrue(found);
+            }
+        }
+
+        @Test
+        public void should_filter_by_release_year() {
+            controller.filtering(null, null, 2000, null, true);
+            // Verify that all movies were released in the year 2000
+            for (Movie movie : controller.allMovies) {
+                assertEquals(2000, movie.getReleaseYear());
+            }
+        }
+
+        @Test
+        public void should_filter_by_rating_from() {
+            controller.filtering(null, null, null, 7.0, true);
+            // Verify that all movies have a rating of 7.0 or higher
+            for (Movie movie : controller.allMovies) {
+                assertTrue(movie.getRating() >= 7.0);
+            }
+        }
+
+        @Test
+        public void should_filter_by_genre_and_searchText(){
+            controller.filtering(null, "ANIMATION", null, null, true);
+
+            assertEquals(4, controller.allMovies.size());
+
+            controller.filtering("n", "ANIMATION", null, null, true);
+
+            for (Movie movie : controller.allMovies){
+                boolean found = movie.getTitle().contains("n");
+                assertTrue(found);
+            }
+            assertEquals(2, controller.allMovies.size());
+        }
+
+        @Test
+        public void should_filter_by_genre_and_rating(){
+            controller.filtering(null, "DRAMA", null, 7.0, true);
+            boolean found = false;
+            // Verify that all movies have a rating of 7.0 or higher
+            for (Movie movie : controller.allMovies) {
+                assertTrue(movie.getRating() >= 7.0);
+                for (String genre : movie.getGenre()) {
+                    if (genre.equals("DRAMA")) {
+                        found = true;
+                        break;
+                    }
+                }
+                assertTrue(found);
+            }
+        }
     }
 
     @Nested

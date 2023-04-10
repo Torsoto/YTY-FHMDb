@@ -29,7 +29,7 @@ public class Movie {
     }
 
     //Constructor with every possible value from JSON
-    public Movie(String title, String description, String[] genre,double rating, int releaseYear, List<String> mainCast, String director, String ID, String imgURL, List<String> writers, int length) {
+    public Movie(String title, String description, String[] genre, double rating, int releaseYear, List<String> mainCast, String director, String ID, String imgURL, List<String> writers, int length) {
         this.title = title;
         this.description = description;
         this.genre = genre;
