@@ -60,6 +60,19 @@
     -fx-background-color: #00838f;
 }
 
+.Reset {
+    -fx-background-image: url("https://i.imgur.com/kJSSTYQ.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: contain;
+    -fx-background-color:  transparent;
+    -fx-background-position: center center;
+
+}
+
+.Reset:pressed {
+    -fx-translate-y: 1;
+}
+
 
 .movie-cell {
     -fx-background-color: black;

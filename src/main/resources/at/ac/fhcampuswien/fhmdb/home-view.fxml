@@ -46,10 +46,10 @@
            <JFXButton fx:id="sortBtn" minWidth="55.0" prefHeight="25.0" prefWidth="86.0" styleClass="Btn" stylesheets="@styles.css" text="Sort Z-A" textFill="WHITE" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
            <TextField fx:id="searchField" maxWidth="645.0" prefHeight="25.0" prefWidth="454.0" promptText="Search" stylesheets="@styles.css" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
            <JFXComboBox fx:id="genreComboBox" focusColor="#f5c11800" minWidth="135.0" prefHeight="25.0" prefWidth="150.0" promptText="Filter by Genre" styleClass="filter-combo-box" stylesheets="@styles.css" unFocusColor="#ffffff00" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
-           <JFXButton fx:id="resetBtn" minWidth="41.0" prefHeight="25.0" prefWidth="41.0" styleClass="Btn" stylesheets="@styles.css" text="Reset Category" textFill="WHITE" GridPane.columnIndex="6" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
+           <JFXButton fx:id="resetBtn" alignment="CENTER" onAction="#reset" styleClass="Reset" stylesheets="@styles.css" textFill="WHITE" GridPane.columnIndex="6" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
          <JFXComboBox fx:id="releaseYearComboBox" focusColor="#f5c11800" layoutX="610.0" layoutY="13.0" minWidth="135.0" prefHeight="25.0" prefWidth="180.0" promptText="Filter by Release Year" styleClass="filter-combo-box" stylesheets="@styles.css" unFocusColor="#ffffff00" GridPane.columnIndex="3" />
          <JFXComboBox fx:id="ratingComboBox" focusColor="#f5c11800" layoutX="767.0" layoutY="13.0" minWidth="135.0" prefHeight="25.0" prefWidth="180.0" promptText="Filter by Rating" styleClass="filter-combo-box" stylesheets="@styles.css" unFocusColor="#ffffff00" GridPane.columnIndex="4" />
-         <JFXButton fx:id="resetBtn1" layoutX="1142.0" layoutY="13.0" minWidth="95.0" prefHeight="25.0" prefWidth="107.0" styleClass="Btn" stylesheets="@styles.css" text="Filter" textFill="WHITE" GridPane.columnIndex="5" />
+         <JFXButton fx:id="filterBtn" layoutX="1142.0" layoutY="13.0" minWidth="95.0" onAction="#filter" prefHeight="25.0" prefWidth="75.0" ripplerFill="#ffffff66" styleClass="Btn" stylesheets="@styles.css" text="Filter" textFill="WHITE" GridPane.columnIndex="5" />
        </GridPane>
    </HBox>
    <JFXListView fx:id="movieListView" style="-fx-background-color: #111111;" styleClass="background-black" stylesheets="@styles.css" VBox.vgrow="ALWAYS">

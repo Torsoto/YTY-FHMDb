@@ -1,5 +1,6 @@
 package at.ac.fhcampuswien.fhmdb;
 
+import at.ac.fhcampuswien.fhmdb.API.MovieAPI;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
 import com.jfoenix.controls.JFXButton;
@@ -14,6 +15,7 @@ import javafx.scene.control.TextField;
 import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class HomeController implements Initializable {
     @FXML
@@ -33,43 +35,39 @@ public class HomeController implements Initializable {
 
     @FXML
     public JFXComboBox<String> ratingComboBox;
-
     @FXML
     public JFXButton sortBtn;
+    @FXML
+    public JFXButton filterBtn;
 
+    public MovieAPI API = new MovieAPI();
     public List<Movie> allMovies = Movie.initializeMovies();
 
     protected final ObservableList<Movie> observableMovies = FXCollections.observableArrayList();   // automatically updates corresponding UI elements when underlying data changes
 
-    public void resetCategory(String search){
-        if (genreComboBox != null){
-            genreComboBox.getSelectionModel().clearSelection();
-        } else {
-            filterByGenreAndSearch(null, search);
-        }
-    }
 
-    public void filterByGenreAndSearch(String selectedGenre, String searchText){
-        observableMovies.clear();
-        for (Movie movie : allMovies) {
-            if ((selectedGenre == null || Arrays.asList(movie.getGenre()).contains(selectedGenre))
-                    && (searchText.isEmpty() || movie.getTitle().toLowerCase().contains(searchText.toLowerCase())
-                    || movie.getDescription().toLowerCase().contains(searchText.toLowerCase()))) {
-                observableMovies.add(movie);
-            }
-        }
-    }
-
-    public void releaseYearComboBox(){
-
-    }
-    public void ratingComboBox(){
-
-    }
-
-    public void searchMovies(String searchText){
+    public void filter(){
+        String searchText = searchField.getText();
         String selectedGenre = genreComboBox.getSelectionModel().getSelectedItem();
-        filterByGenreAndSearch(selectedGenre, searchText);
+        String selectedReleaseYear = releaseYearComboBox.getSelectionModel().getSelectedItem();
+        String selectedRating = ratingComboBox.getSelectionModel().getSelectedItem();
+
+        Integer releaseYear = null;
+        if (selectedReleaseYear != null) {
+            releaseYear = Integer.parseInt(selectedReleaseYear);
+        }
+        Double ratingFrom = null;
+        if (selectedRating != null) {
+            ratingFrom = Double.parseDouble(selectedRating);
+        }
+
+        MovieAPI API = new MovieAPI();
+        allMovies = API.fetchMovies(searchText, selectedGenre, releaseYear, ratingFrom, true);
+
+        observableMovies.clear();
+        observableMovies.addAll(allMovies);
+        sort();
+        sortBtn.setText("Sort Z-A");
     }
 
     public void sort(){
@@ -81,25 +79,37 @@ public class HomeController implements Initializable {
 
     // Initialize and populate the releaseYearComboBox and ratingComboBox
     public void initComboBoxes() {
+
         // Populate releaseYearComboBox
         Set<Integer> releaseYears = allMovies.stream()
                 .map(Movie::getReleaseYear)
                 .collect(Collectors.toSet());
         releaseYearComboBox.getItems().addAll(releaseYears.stream().map(String::valueOf).sorted(Comparator.reverseOrder()).toList());
-        releaseYearComboBox.setPromptText("Filter by Release Year");
+        releaseYearComboBox.setPromptText("Filter by Year");
 
         // Populate ratingComboBox
-        Set<Double> ratings = allMovies.stream()
-                .map(Movie::getRating)
-                .collect(Collectors.toSet());
-        ratingComboBox.getItems().addAll(ratings.stream().map(String::valueOf).sorted(Comparator.reverseOrder()).toList());
+        List<String> ratings = IntStream.rangeClosed(1, 9)
+                .mapToObj(String::valueOf).sorted(Comparator.reverseOrder()).toList();
+
+        ratingComboBox.getItems().addAll(ratings);
         ratingComboBox.setPromptText("Filter by Rating");
+    }
+
+    public void reset(){
+        searchField.clear();
+        genreComboBox.getSelectionModel().clearSelection();
+        releaseYearComboBox.getSelectionModel().clearSelection();
+        ratingComboBox.getSelectionModel().clearSelection();
+
+        allMovies = API.fetchMovies(null, null, null, null, true);
+        observableMovies.clear();
+        observableMovies.addAll(allMovies);
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         observableMovies.addAll(allMovies);         // add dummy data to observable list
+        sort();
 
         // initialize UI stuff
         movieListView.setItems(observableMovies); // set data of observable list to list view
@@ -109,33 +119,6 @@ public class HomeController implements Initializable {
         genreComboBox.getItems().addAll(Movie.getAllGenres());
 
         initComboBoxes();
-
-        //Listener that checks for changes in the genreComboBox
-        genreComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            String searchText = searchField.getText().trim().toLowerCase();
-            filterByGenreAndSearch(newValue, searchText);
-        });
-
-        releaseYearComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-                    updateFilter();
-        });
-
-        ratingComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            updateFilter();
-        });
-
-        //releaseYearComboBox.setPromptText("Filter by Release Year");
-
-        //ratingComboBox.setPromptText("Filter by Rating");
-
-
-        //Listener that checks for changes in the searchField
-        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            String searchText = newValue.trim().toLowerCase();
-            searchMovies(searchText);
-        });
-
-        resetBtn.setOnAction(actionEvent -> resetCategory(searchField.getText().trim().toLowerCase()));
 
         sortBtn.setOnAction(actionEvent -> {
             if(sortBtn.getText().equals("Sort A-Z")) {
@@ -150,25 +133,6 @@ public class HomeController implements Initializable {
         });
 
     }
-
-    public void updateFilter() {
-        String searchText = searchField.getText().trim().toLowerCase();
-        String selectedGenre = genreComboBox.getSelectionModel().getSelectedItem();
-        String selectedYear = releaseYearComboBox.getSelectionModel().getSelectedItem();
-        String selectedRating = ratingComboBox.getSelectionModel().getSelectedItem();
-
-        observableMovies.setAll(
-                allMovies.stream()
-                        .filter(movie -> selectedGenre == null || Arrays.asList(movie.getGenre()).contains(selectedGenre))
-                        .filter(movie -> selectedYear == null || movie.getReleaseYear() == Integer.parseInt(selectedYear))
-                        .filter(movie -> selectedRating == null || movie.getRating() == Double.parseDouble(selectedRating))
-                        .filter(movie -> searchText.isEmpty() ||
-                                movie.getTitle().toLowerCase().contains(searchText) ||
-                                movie.getDescription().toLowerCase().contains(searchText))
-                        .collect(Collectors.toList())
-        );
-    }
-
     //returns the person who appears most often in the mainCast of the passed movies
     String getMostPopularActor(List<Movie> movies) {
         Map<String, Long> actorsCount = movies.stream()
