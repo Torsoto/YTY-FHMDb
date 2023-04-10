@@ -30,11 +30,12 @@
        <GridPane hgap="5.0" prefHeight="30.0" prefWidth="1216.0" HBox.hgrow="ALWAYS">
            <columnConstraints>
                <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="87.0" minWidth="10.0" prefWidth="76.0" />
-               <ColumnConstraints hgrow="ALWAYS" maxWidth="500.0" prefWidth="902.0" />
+               <ColumnConstraints hgrow="ALWAYS" maxWidth="600.0" prefWidth="902.0" />
                <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="155.0" minWidth="10.0" prefWidth="141.0" />
             <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="180.0" minWidth="10.0" prefWidth="141.0" />
             <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="180.0" minWidth="10.0" prefWidth="141.0" />
                <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="110.0" minWidth="10.0" prefWidth="104.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="40.0" minWidth="10.0" prefWidth="104.0" />
            </columnConstraints>
            <rowConstraints>
                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -43,11 +44,12 @@
                <Insets left="20.0" right="20.0" />
            </HBox.margin>
            <JFXButton fx:id="sortBtn" minWidth="55.0" prefHeight="25.0" prefWidth="86.0" styleClass="Btn" stylesheets="@styles.css" text="Sort Z-A" textFill="WHITE" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
-           <TextField fx:id="searchField" maxWidth="645.0" prefHeight="25.0" prefWidth="645.0" promptText="Search" stylesheets="@styles.css" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
+           <TextField fx:id="searchField" maxWidth="645.0" prefHeight="25.0" prefWidth="454.0" promptText="Search" stylesheets="@styles.css" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
            <JFXComboBox fx:id="genreComboBox" focusColor="#f5c11800" minWidth="135.0" prefHeight="25.0" prefWidth="150.0" promptText="Filter by Genre" styleClass="filter-combo-box" stylesheets="@styles.css" unFocusColor="#ffffff00" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
-           <JFXButton fx:id="resetBtn" minWidth="95.0" prefHeight="25.0" prefWidth="107.0" styleClass="Btn" stylesheets="@styles.css" text="Reset Category" textFill="WHITE" GridPane.columnIndex="5" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
-         <ComboBox prefHeight="25.0" prefWidth="180.0" promptText="Filter by Release Year" GridPane.columnIndex="3" />
-         <ComboBox prefHeight="25.0" prefWidth="180.0" promptText="Filter by Rating" GridPane.columnIndex="4" />
+           <JFXButton fx:id="resetBtn" minWidth="41.0" prefHeight="25.0" prefWidth="41.0" styleClass="Btn" stylesheets="@styles.css" text="Reset Category" textFill="WHITE" GridPane.columnIndex="6" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
+         <JFXComboBox fx:id="releaseYearComboBox" focusColor="#f5c11800" layoutX="610.0" layoutY="13.0" minWidth="135.0" prefHeight="25.0" prefWidth="180.0" promptText="Filter by Release Year" styleClass="filter-combo-box" stylesheets="@styles.css" unFocusColor="#ffffff00" GridPane.columnIndex="3" />
+         <JFXComboBox fx:id="ratingComboBox" focusColor="#f5c11800" layoutX="767.0" layoutY="13.0" minWidth="135.0" prefHeight="25.0" prefWidth="180.0" promptText="Filter by Rating" styleClass="filter-combo-box" stylesheets="@styles.css" unFocusColor="#ffffff00" GridPane.columnIndex="4" />
+         <JFXButton fx:id="resetBtn1" layoutX="1142.0" layoutY="13.0" minWidth="95.0" prefHeight="25.0" prefWidth="107.0" styleClass="Btn" stylesheets="@styles.css" text="Filter" textFill="WHITE" GridPane.columnIndex="5" />
        </GridPane>
    </HBox>
    <JFXListView fx:id="movieListView" style="-fx-background-color: #111111;" styleClass="background-black" stylesheets="@styles.css" VBox.vgrow="ALWAYS">
