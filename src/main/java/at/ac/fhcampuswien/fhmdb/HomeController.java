@@ -29,6 +29,12 @@ public class HomeController implements Initializable {
     public JFXComboBox<String> genreComboBox;
 
     @FXML
+    public JFXComboBox<String> releaseYearComboBox;
+
+    @FXML
+    public JFXComboBox<String> ratingComboBox;
+
+    @FXML
     public JFXButton sortBtn;
 
     public List<Movie> allMovies = Movie.initializeMovies();
@@ -54,6 +60,13 @@ public class HomeController implements Initializable {
         }
     }
 
+    public void releaseYearComboBox(){
+
+    }
+    public void ratingComboBox(){
+
+    }
+
     public void searchMovies(String searchText){
         String selectedGenre = genreComboBox.getSelectionModel().getSelectedItem();
         filterByGenreAndSearch(selectedGenre, searchText);
@@ -64,6 +77,23 @@ public class HomeController implements Initializable {
     }
     public void sortReverse() {
         FXCollections.sort(observableMovies, Comparator.comparing(Movie::getTitle).reversed());
+    }
+
+    // Initialize and populate the releaseYearComboBox and ratingComboBox
+    public void initComboBoxes() {
+        // Populate releaseYearComboBox
+        Set<Integer> releaseYears = allMovies.stream()
+                .map(Movie::getReleaseYear)
+                .collect(Collectors.toSet());
+        releaseYearComboBox.getItems().addAll(releaseYears.stream().map(String::valueOf).sorted(Comparator.reverseOrder()).toList());
+        releaseYearComboBox.setPromptText("Filter by Release Year");
+
+        // Populate ratingComboBox
+        Set<Double> ratings = allMovies.stream()
+                .map(Movie::getRating)
+                .collect(Collectors.toSet());
+        ratingComboBox.getItems().addAll(ratings.stream().map(String::valueOf).sorted(Comparator.reverseOrder()).toList());
+        ratingComboBox.setPromptText("Filter by Rating");
     }
 
     @Override
@@ -78,11 +108,26 @@ public class HomeController implements Initializable {
         genreComboBox.setPromptText("Filter by Genre");
         genreComboBox.getItems().addAll(Movie.getAllGenres());
 
+        initComboBoxes();
+
         //Listener that checks for changes in the genreComboBox
         genreComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             String searchText = searchField.getText().trim().toLowerCase();
             filterByGenreAndSearch(newValue, searchText);
         });
+
+        releaseYearComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                    updateFilter();
+        });
+
+        ratingComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            updateFilter();
+        });
+
+        //releaseYearComboBox.setPromptText("Filter by Release Year");
+
+        //ratingComboBox.setPromptText("Filter by Rating");
+
 
         //Listener that checks for changes in the searchField
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -104,6 +149,24 @@ public class HomeController implements Initializable {
             }
         });
 
+    }
+
+    public void updateFilter() {
+        String searchText = searchField.getText().trim().toLowerCase();
+        String selectedGenre = genreComboBox.getSelectionModel().getSelectedItem();
+        String selectedYear = releaseYearComboBox.getSelectionModel().getSelectedItem();
+        String selectedRating = ratingComboBox.getSelectionModel().getSelectedItem();
+
+        observableMovies.setAll(
+                allMovies.stream()
+                        .filter(movie -> selectedGenre == null || Arrays.asList(movie.getGenre()).contains(selectedGenre))
+                        .filter(movie -> selectedYear == null || movie.getReleaseYear() == Integer.parseInt(selectedYear))
+                        .filter(movie -> selectedRating == null || movie.getRating() == Double.parseDouble(selectedRating))
+                        .filter(movie -> searchText.isEmpty() ||
+                                movie.getTitle().toLowerCase().contains(searchText) ||
+                                movie.getDescription().toLowerCase().contains(searchText))
+                        .collect(Collectors.toList())
+        );
     }
 
     //returns the person who appears most often in the mainCast of the passed movies
