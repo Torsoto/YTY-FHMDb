@@ -19,7 +19,7 @@ public class Movie {
 
     private static final String[] genres = {"ACTION", "ADVENTURE", "ANIMATION", "BIOGRAPHY", "COMEDY",
             "CRIME", "DRAMA", "DOCUMENTARY", "FAMILY", "FANTASY", "HISTORY", "HORROR",
-            "MUSICAL", "MYSTERY", "ROMANCE", "SCI-FI", "SPORT", "THRILLER", "WAR",
+            "MUSICAL", "MYSTERY", "ROMANCE", "SCIENCE FICTION", "SPORT", "THRILLER", "WAR",
             "WESTERN"};
 
 
