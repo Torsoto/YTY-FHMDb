@@ -30,8 +30,8 @@ public class Database {
      }
 
      public void testDB() throws SQLException {
-          WatchlistMovieEntity entity = new WatchlistMovieEntity("1","abc","wasamk","horror",2019,"www.oasch.com",22,8);
-          dao.create(entity);
+          WatchlistMovieEntity entity = new WatchlistMovieEntity("asdas","abc","wasamk","horror",2019,"www.oasch.com",22,8);
+           dao.create(entity);
      }
 
      public static Database getDatabase(){
