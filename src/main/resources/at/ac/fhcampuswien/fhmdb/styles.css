@@ -46,7 +46,6 @@
     -fx-text-fill: white;
 }
 
-
 .Btn {
     -fx-background-color:  #00acc1;
     -fx-text-fill: white;
@@ -82,4 +81,11 @@
 .filter-combo-box {
     -fx-background-color: white;
     -fx-text-fill: #ffffff;
+}
+
+.menuText {
+    -fx-text-fill: #dcdcdc;
+    -fx-font-weight: 200;
+    -fx-font-style: italic;
+    -fx-border-width: 2;
 }

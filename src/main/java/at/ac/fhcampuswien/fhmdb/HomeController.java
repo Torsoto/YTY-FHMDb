@@ -10,6 +10,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
@@ -39,11 +40,16 @@ public class HomeController implements Initializable {
     public JFXButton sortBtn;
     @FXML
     public JFXButton filterBtn;
+    @FXML
+    public Label homeLabel;
+    @FXML
+    public Label watchlistLabel;
+    @FXML
+    public Label aboutLabel;
 
     public MovieAPI API = new MovieAPI();
     public List<Movie> allMovies = Movie.initializeMovies();
-
-    protected final ObservableList<Movie> observableMovies = FXCollections.observableArrayList();   // automatically updates corresponding UI elements when underlying data changes
+    protected final ObservableList<Movie> observableMovies = FXCollections.observableArrayList();  // automatically updates corresponding UI elements when underlying data changes
 
 
     public void filter(){
@@ -60,7 +66,7 @@ public class HomeController implements Initializable {
         if (selectedRating != null) {
             ratingFrom = Double.parseDouble(selectedRating);
         }
-        filtering(searchText, selectedGenre, releaseYear, ratingFrom, true);
+        filtering(searchText, selectedGenre, releaseYear, ratingFrom, false);
         sort();
         sortBtn.setText("Sort Z-A");
     }
@@ -104,7 +110,7 @@ public class HomeController implements Initializable {
         releaseYearComboBox.getSelectionModel().clearSelection();
         ratingComboBox.getSelectionModel().clearSelection();
 
-        allMovies = API.fetchMovies(null, null, null, null, true);
+        allMovies = API.fetchMovies(null, null, null, null, false);
         observableMovies.clear();
         observableMovies.addAll(allMovies);
     }
@@ -122,6 +128,15 @@ public class HomeController implements Initializable {
         genreComboBox.getItems().addAll(Movie.getAllGenres());
 
         initComboBoxes();
+
+        homeLabel.setOnMouseClicked(e -> {
+
+        });
+
+        watchlistLabel.setOnMouseClicked(e -> {
+
+        });
+
 
         sortBtn.setOnAction(actionEvent -> {
             if(sortBtn.getText().equals("Sort A-Z")) {
