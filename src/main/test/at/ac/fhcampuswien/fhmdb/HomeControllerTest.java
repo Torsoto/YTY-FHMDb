@@ -33,6 +33,7 @@ public class HomeControllerTest {
         void testFiltering_withSearchText() {
             controller.filtering("Lord", null, null, null, true);
 
+
             for (Movie movie : controller.allMovies){
                 boolean found = movie.getTitle().contains("Lord");
                 assertTrue(found);
