@@ -2,6 +2,7 @@ package at.ac.fhcampuswien.fhmdb.controllers;
 
 import at.ac.fhcampuswien.fhmdb.API.MovieAPI;
 import at.ac.fhcampuswien.fhmdb.DataLayer.WatchlistMovieEntity;
+import at.ac.fhcampuswien.fhmdb.ExceptionHandling.MovieApiException;
 import at.ac.fhcampuswien.fhmdb.FhmdbApplication;
 import at.ac.fhcampuswien.fhmdb.Interfaces.ClickEventHandler;
 import at.ac.fhcampuswien.fhmdb.DataLayer.WatchlistRepository;
@@ -51,6 +52,9 @@ public class WatchlistController implements Initializable {
     private final ClickEventHandler onAddToWatchListClicked = (clickedItem) -> {
 
     };
+
+    public WatchlistController() throws MovieApiException {
+    }
 
     public void sort(){
         FXCollections.sort(observableMovies, Comparator.comparing(Movie::getTitle));

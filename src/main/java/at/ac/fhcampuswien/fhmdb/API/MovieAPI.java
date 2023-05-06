@@ -1,8 +1,10 @@
 package at.ac.fhcampuswien.fhmdb.API;
 
+import at.ac.fhcampuswien.fhmdb.ExceptionHandling.MovieApiException;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
+import javafx.fxml.LoadException;
 import okhttp3.*;
 
 import java.io.IOException;
@@ -51,15 +53,16 @@ public class MovieAPI {
                 .build();
     }
 
-    private <T> T executeRequest(Request request, Type type, Gson gson) {
+    private <T> T executeRequest(Request request, Type type, Gson gson) throws MovieApiException {
         try (Response response = client.newCall(request).execute()) {
             if (response.isSuccessful()) {
                 return gson.fromJson(response.body().charStream(), type);
             } else {
-                throw new IOException("Unexpected response: " + response);
+                throw new MovieApiException("Unexpected response: " + response);
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (IOException ioe) {
+            throw new MovieApiException("The Request could not be executed",ioe);
+
         }
     }
 
@@ -88,16 +91,17 @@ public class MovieAPI {
         return "http://prog2.fh-campuswien.ac.at/movies/" + movieId;
     }
 
-    public List<Movie> fetchMovies(String query, String genre, Integer releaseYear, Double ratingFrom) {
+    public List<Movie> fetchMovies(String query, String genre, Integer releaseYear, Double ratingFrom)throws MovieApiException {
         String url = buildURL(query, genre, releaseYear, ratingFrom);
         Request request = createRequest(url);
         Gson gson = getGsonWithMovieDeserializer();
         Type movieListType = new TypeToken<List<Movie>>() {}.getType();
 
         return executeRequest(request, movieListType, gson);
+
     }
 
-    public Movie fetchMovieById(String movieId, boolean UI) {
+    public Movie fetchMovieById(String movieId, boolean UI) throws MovieApiException {
         String url = buildMovieByIdURL(movieId);
         Request request = createRequest(url);
         Gson gson =  getGsonWithMovieDeserializer();
