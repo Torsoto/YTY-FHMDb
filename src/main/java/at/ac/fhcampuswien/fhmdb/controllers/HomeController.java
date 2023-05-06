@@ -1,7 +1,7 @@
 package at.ac.fhcampuswien.fhmdb.controllers;
 
 import at.ac.fhcampuswien.fhmdb.API.MovieAPI;
-import at.ac.fhcampuswien.fhmdb.ClickEventHandler;
+import at.ac.fhcampuswien.fhmdb.Interfaces.ClickEventHandler;
 import at.ac.fhcampuswien.fhmdb.DataLayer.WatchlistRepository;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
@@ -16,7 +16,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
