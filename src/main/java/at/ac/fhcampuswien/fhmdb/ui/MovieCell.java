@@ -1,5 +1,6 @@
 package at.ac.fhcampuswien.fhmdb.ui;
 
+import at.ac.fhcampuswien.fhmdb.DataLayer.WatchlistRepository;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -8,6 +9,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+
+import java.sql.SQLException;
 
 
 public class MovieCell extends ListCell<Movie> {
@@ -27,6 +30,8 @@ public class MovieCell extends ListCell<Movie> {
     private final HBox Buttons = new HBox(openDetailsBtn, addToWatchlistBtn);
     private final VBox layout = new VBox(title, description, genre, releaseYear);
     private final StackPane stackPane = new StackPane(layout, rating, Buttons);
+
+    WatchlistRepository repository = new WatchlistRepository();
 
     @Override
     protected void updateItem(Movie movie, boolean empty) {
@@ -85,7 +90,11 @@ public class MovieCell extends ListCell<Movie> {
                     //TODO Add code so it adds from DATABASE
 
                     addToWatchlistBtn.setOnMouseClicked(mouseEvent -> {
-
+                        try {
+                            repository.addToWatchlist(getItem());
+                        } catch (SQLException e) {
+                            throw new RuntimeException(e);
+                        }
                         //Database.getDatabase().dao.create();
                     });
                 } else {
