@@ -14,28 +14,28 @@ import javafx.scene.paint.Color;
 import java.sql.SQLException;
 
 
-public class MovieCell extends ListCell<Movie> {
+public class MovieCellWatchList extends ListCell<Movie> {
     private final Label title = new Label();
     private final Label description = new Label();
     private final Label releaseYear = new Label();
     private final Label rating = new Label();
     private final Label genre = new Label();
     private final Button openDetailsBtn = new Button();
-    private final Button addToWatchlistBtn = new Button();
+    private final Button removeFromWatchlistBtn = new Button();
     private final Label mainCast = new Label();
     private final Label director = new Label();
     private final Label ID = new Label();
     private final Label writers = new Label();
     private final Label length = new Label();
     private final Label imgURL = new Label();
-    private final HBox Buttons = new HBox(openDetailsBtn, addToWatchlistBtn);
+    private final HBox Buttons = new HBox(openDetailsBtn, removeFromWatchlistBtn);
     private final VBox layout = new VBox(title, description, genre, releaseYear);
     private final StackPane stackPane = new StackPane(layout, rating, Buttons);
     private final WatchlistRepository repo = new WatchlistRepository();
 
-    public MovieCell(ClickEventHandler<Movie> addToWatchlistClicked) {
+    public MovieCellWatchList(ClickEventHandler<Movie> addToWatchlistClicked) {
         super();
-        addToWatchlistBtn.setOnMouseClicked(mouseEvent -> {
+        removeFromWatchlistBtn.setOnMouseClicked(mouseEvent -> {
             addToWatchlistClicked.onClick(getItem());
         });
     }
@@ -71,10 +71,6 @@ public class MovieCell extends ListCell<Movie> {
                 genre.setText(String.join(", ", movie.getGenre()));
                 releaseYear.setText("Release Year: " + movie.getReleaseYear());
                 rating.setText(String.valueOf(movie.getRating()));
-                mainCast.setText("Main-Cast: " + String.join(", ", movie.getMainCast()));
-                director.setText("Director: " + movie.getDirector());
-                writers.setText("writers: " + String.join(", ", movie.getWriters()));
-                length.setText("Length: " + movie.getLength() + "m");
                 imgURL.setText("Image URL: " + movie.getImgURL());
                 ID.setText("ID: " + movie.getID());
             }catch (NullPointerException e){
@@ -85,25 +81,17 @@ public class MovieCell extends ListCell<Movie> {
             openDetailsBtn.setOnAction(event -> {
                 if (openDetailsBtn.getText().equals("Show Details")) {
                     openDetailsBtn.setText("Hide Details");
-                    layout.getChildren().addAll(mainCast, director, ID, writers, length, imgURL);
+                    layout.getChildren().addAll(ID,imgURL);
                 } else {
                     openDetailsBtn.setText("Show Details");
-                    layout.getChildren().removeAll(mainCast, director, ID, writers, length, imgURL);
+                    layout.getChildren().removeAll(ID,imgURL);
                 }
             });
 
 
-            addToWatchlistBtn.setOnAction(event -> {
+            removeFromWatchlistBtn.setOnAction(event -> {
                 try {
-                    if (!repo.isMovieInWatchlist(movie)){
-                        try {
-                            repo.addToWatchlist(movie);
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
-                    } else {
-                        System.out.println("Movie already in Watchlist!");
-                    }
+                    repo.removeFromWatchlist(movie);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -124,7 +112,7 @@ public class MovieCell extends ListCell<Movie> {
             releaseYear.getStyleClass().add("text-releaseYear");
             rating.getStyleClass().add("text-rating");
             openDetailsBtn.getStyleClass().add("Btn");
-            addToWatchlistBtn.getStyleClass().add("Btn");
+            removeFromWatchlistBtn.getStyleClass().add("Btn");
             layout.setBackground(new Background(new BackgroundFill(Color.web("#00454c"), null, null)));
 
             // layout
@@ -136,7 +124,7 @@ public class MovieCell extends ListCell<Movie> {
             layout.alignmentProperty().set(Pos.CENTER_LEFT);
 
             openDetailsBtn.setText("Show Details");
-            addToWatchlistBtn.setText("Add to Watchlist");
+            removeFromWatchlistBtn.setText("Remove");
             StackPane.setAlignment(rating, Pos.TOP_RIGHT);
             Buttons.setSpacing(10);
             rating.setPadding(new Insets(5));

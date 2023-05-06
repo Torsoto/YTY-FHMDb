@@ -1,6 +1,7 @@
 package at.ac.fhcampuswien.fhmdb.controllers;
 
 import at.ac.fhcampuswien.fhmdb.API.MovieAPI;
+import at.ac.fhcampuswien.fhmdb.FhmdbApplication;
 import at.ac.fhcampuswien.fhmdb.Interfaces.ClickEventHandler;
 import at.ac.fhcampuswien.fhmdb.DataLayer.WatchlistRepository;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
@@ -11,10 +12,16 @@ import com.jfoenix.controls.JFXListView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -48,7 +55,8 @@ public class HomeController implements Initializable {
     public Label watchlistLabel;
     @FXML
     public Label aboutLabel;
-
+    @FXML
+    public VBox root;
     public MovieAPI API = new MovieAPI();
     public List<Movie> allMovies = Movie.initializeMovies();
     protected final ObservableList<Movie> observableMovies = FXCollections.observableArrayList();  // automatically updates corresponding UI elements when underlying data changes
@@ -136,14 +144,11 @@ public class HomeController implements Initializable {
 
         initComboBoxes();
 
-        homeLabel.setOnMouseClicked(e -> {
-            observableMovies.clear();
-            observableMovies.addAll(allMovies);
-            sort();
-        });
+        homeLabel.getStyleClass().clear();
+        homeLabel.getStyleClass().add("text-blue");
 
         watchlistLabel.setOnMouseClicked(e -> {
-            observableMovies.clear();
+            loadWatchlistFXML();
         });
 
 
@@ -158,8 +163,23 @@ public class HomeController implements Initializable {
                 sortBtn.setText("Sort A-Z");
             }
         });
-
     }
+    public void setWatchListView (String path) {
+        FXMLLoader fxmlLoader = new FXMLLoader(FhmdbApplication.class.getResource("/watchlist-view.fxml"));
+        try {
+            Scene scene = new Scene(fxmlLoader.load(), 1280, 720);
+            Stage stage = (Stage)root.getScene().getWindow();
+            stage.setScene(scene);
+
+        } catch (IOException ioe) {
+            System.out.println("test");
+        }
+    }
+
+    public void loadWatchlistFXML(){
+        setWatchListView("/watchlist-view.fxml");
+    }
+
     //returns the person who appears most often in the mainCast of the passed movies
     String getMostPopularActor(List<Movie> movies) {
         Map<String, Long> actorsCount = movies.stream()
