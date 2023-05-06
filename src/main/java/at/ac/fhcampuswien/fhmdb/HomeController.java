@@ -73,7 +73,7 @@ public class HomeController implements Initializable {
 
     public void filtering(String searchText, String selectedGenre, Integer releaseYear, Double ratingFrom, boolean UI){
         MovieAPI API = new MovieAPI();
-        allMovies = API.fetchMovies(searchText, selectedGenre, releaseYear, ratingFrom, UI);
+        allMovies = API.fetchMovies(searchText, selectedGenre, releaseYear, ratingFrom);
 
         observableMovies.clear();
         observableMovies.addAll(allMovies);
@@ -110,7 +110,7 @@ public class HomeController implements Initializable {
         releaseYearComboBox.getSelectionModel().clearSelection();
         ratingComboBox.getSelectionModel().clearSelection();
 
-        allMovies = API.fetchMovies(null, null, null, null, false);
+        allMovies = API.fetchMovies(null, null, null, null);
         observableMovies.clear();
         observableMovies.addAll(allMovies);
     }

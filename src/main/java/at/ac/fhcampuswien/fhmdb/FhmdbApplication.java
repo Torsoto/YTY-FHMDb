@@ -1,6 +1,5 @@
 package at.ac.fhcampuswien.fhmdb;
 
-import at.ac.fhcampuswien.fhmdb.DataLayer.Database;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -18,7 +17,6 @@ public class FhmdbApplication extends Application {
         stage.setTitle("YTY-FHMDb");
         stage.setScene(scene);
         stage.show();
-
     }
 
     public static void main(String[] args) {

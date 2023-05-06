@@ -9,9 +9,9 @@ import com.j256.ormlite.table.TableUtils;
 import java.sql.SQLException;
 
 public class Database {
-     private static final String DB_URL = "jdbc:h2:file: ./db/watchlistdb";
-     private static final String user = "user";
-     private static final String password = "pass";
+     public static final String DB_URL = "jdbc:h2:file: ./db/watchlistdb";
+     public static final String user = "user";
+     public static final String password = "pass";
 
      private static ConnectionSource connectionSource;
 

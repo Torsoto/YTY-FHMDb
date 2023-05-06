@@ -20,22 +20,6 @@ public class MovieAPI {
     }
 
 
-    private Gson getGsonWithMovieDeserializerForUI() {
-        return createGson((json, typeOfT, context) -> {
-            JsonObject jsonObject = json.getAsJsonObject();
-
-            String title = jsonObject.get("title").getAsString();
-            String description = jsonObject.get("description").getAsString();
-            JsonArray genreArray = jsonObject.getAsJsonArray("genres");
-            String[] genre = new Gson().fromJson(genreArray, String[].class);
-            int releaseYear = jsonObject.get("releaseYear").getAsInt();
-            String imgURL = jsonObject.get("imgUrl").getAsString();
-            double rating = jsonObject.get("rating").getAsDouble();
-
-            return new Movie(title, description, genre, rating, releaseYear, imgURL);
-        });
-    }
-
     private Gson getGsonWithMovieDeserializer() {
         return createGson((json, typeOfT, context) -> {
             JsonObject jsonObject = json.getAsJsonObject();
@@ -104,10 +88,10 @@ public class MovieAPI {
         return "http://prog2.fh-campuswien.ac.at/movies/" + movieId;
     }
 
-    public List<Movie> fetchMovies(String query, String genre, Integer releaseYear, Double ratingFrom, boolean UI) {
+    public List<Movie> fetchMovies(String query, String genre, Integer releaseYear, Double ratingFrom) {
         String url = buildURL(query, genre, releaseYear, ratingFrom);
         Request request = createRequest(url);
-        Gson gson = UI ? getGsonWithMovieDeserializerForUI() : getGsonWithMovieDeserializer();
+        Gson gson = getGsonWithMovieDeserializer();
         Type movieListType = new TypeToken<List<Movie>>() {}.getType();
 
         return executeRequest(request, movieListType, gson);
@@ -116,7 +100,7 @@ public class MovieAPI {
     public Movie fetchMovieById(String movieId, boolean UI) {
         String url = buildMovieByIdURL(movieId);
         Request request = createRequest(url);
-        Gson gson = UI ? getGsonWithMovieDeserializerForUI() : getGsonWithMovieDeserializer();
+        Gson gson =  getGsonWithMovieDeserializer();
 
         return executeRequest(request, Movie.class, gson);
     }

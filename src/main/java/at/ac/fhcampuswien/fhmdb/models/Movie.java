@@ -25,7 +25,7 @@ public class Movie {
 
     public static List<Movie> initializeMovies(){
         MovieAPI movieAPI = new MovieAPI();
-        return movieAPI.fetchMovies(null, null, null, null, false);
+        return movieAPI.fetchMovies(null, null, null, null);
     }
 
     //Constructor with every possible value from JSON
@@ -43,15 +43,6 @@ public class Movie {
         this.releaseYear = releaseYear;
     }
 
-    //Constructor for UI
-    public Movie(String title, String description, String[] genre, double rating, int releaseYear, String imgURL) {
-        this.title = title;
-        this.description = description;
-        this.genre = genre;
-        this.rating = rating;
-        this.releaseYear = releaseYear;
-        this.imgURL = imgURL;
-    }
 
     public String getTitle() {
         return title;
