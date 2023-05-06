@@ -1,6 +1,7 @@
 package at.ac.fhcampuswien.fhmdb.ui;
 
 import at.ac.fhcampuswien.fhmdb.DataLayer.WatchlistRepository;
+import at.ac.fhcampuswien.fhmdb.ExceptionHandling.DatabaseException;
 import at.ac.fhcampuswien.fhmdb.Interfaces.ClickEventHandler;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import javafx.geometry.Insets;
@@ -93,7 +94,7 @@ public class MovieCellWatchList extends ListCell<Movie> {
                 try {
                     repo.removeFromWatchlist(movie);
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    MovieCell.showExceptionDialog(new DatabaseException("Database problem!"));
                 }
             });
 

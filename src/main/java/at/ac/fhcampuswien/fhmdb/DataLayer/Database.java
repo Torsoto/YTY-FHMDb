@@ -28,7 +28,7 @@ public class Database{
                dao = DaoManager.createDao(connectionSource, WatchlistMovieEntity.class);
                createTables();
           } catch (SQLException e) {
-               MovieCell.showExceptionDialog(new DatabaseException("Database problem"));
+               MovieCell.showExceptionDialog(new DatabaseException("Database problem: already in use!"));
           }
      }
 

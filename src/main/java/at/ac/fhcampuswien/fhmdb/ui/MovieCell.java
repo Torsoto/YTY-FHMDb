@@ -1,7 +1,7 @@
 package at.ac.fhcampuswien.fhmdb.ui;
 
 import at.ac.fhcampuswien.fhmdb.DataLayer.WatchlistRepository;
-import at.ac.fhcampuswien.fhmdb.ExceptionHandling.MovieApiException;
+import at.ac.fhcampuswien.fhmdb.ExceptionHandling.DatabaseException;
 import at.ac.fhcampuswien.fhmdb.Interfaces.ClickEventHandler;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import javafx.geometry.Insets;
@@ -133,10 +133,10 @@ public class MovieCell extends ListCell<Movie> {
                             e.printStackTrace();
                         }
                     } else {
-                        System.out.println("Movie already in Watchlist!");
+                        MovieCell.showExceptionDialog(new DatabaseException("Movie already in your Watchlist!"));
                     }
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    MovieCell.showExceptionDialog(new DatabaseException("Database problem! Error in ddd to Watchlist functionality"));
                 }
             });
 

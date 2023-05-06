@@ -28,7 +28,7 @@ public class WatchlistRepository {
         dao.delete(readAllMovies());
 
         // Reset the watchlist ID
-        dao.executeRaw("TRUNCATE TABLE my_table RESTART IDENTITY;");
+        dao.executeRaw("TRUNCATE TABLE WATCHLIST RESTART IDENTITY;");
     }
 
     public WatchlistMovieEntity readMovieById(long id) throws SQLException {
