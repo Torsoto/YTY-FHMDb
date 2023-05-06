@@ -4,9 +4,7 @@ import at.ac.fhcampuswien.fhmdb.Interfaces.ClickEventHandler;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
@@ -35,6 +33,38 @@ public class MovieCell extends ListCell<Movie> {
             addToWatchlistClicked.onClick(getItem());
         });
         // ... rest of code
+    }
+
+    public MovieCell() {
+
+    }
+    public static void showExceptionDialog(Throwable throwable) {    // source: http://www.java2s.com/example/java/javafx/show-javafx-exception-dialog.html
+        //throwable.printStackTrace();
+
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Fhmdb Dialog");
+        alert.setHeaderText("Thrown Exception");
+        alert.setContentText("App has thrown an exception.");
+
+        Label label = new Label("The exception stacktrace was:");
+
+        TextArea textArea = new TextArea(throwable.getMessage());
+        textArea.setEditable(false);
+        textArea.setWrapText(true);
+
+        textArea.setMaxWidth(Double.MAX_VALUE);
+        textArea.setMaxHeight(Double.MAX_VALUE);
+        GridPane.setVgrow(textArea, Priority.ALWAYS);
+        GridPane.setHgrow(textArea, Priority.ALWAYS);
+
+        GridPane expContent = new GridPane();
+        expContent.setMaxWidth(Double.MAX_VALUE);
+        expContent.add(label, 0, 0);
+        expContent.add(textArea, 0, 1);
+
+        alert.getDialogPane().setExpandableContent(expContent);
+
+        alert.show();
     }
 
     @Override

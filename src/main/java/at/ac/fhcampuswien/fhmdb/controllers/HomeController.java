@@ -1,6 +1,7 @@
 package at.ac.fhcampuswien.fhmdb.controllers;
 
 import at.ac.fhcampuswien.fhmdb.API.MovieAPI;
+import at.ac.fhcampuswien.fhmdb.ExceptionHandling.MovieApiException;
 import at.ac.fhcampuswien.fhmdb.Interfaces.ClickEventHandler;
 import at.ac.fhcampuswien.fhmdb.DataLayer.WatchlistRepository;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
@@ -58,8 +59,11 @@ public class HomeController implements Initializable {
 
     };
 
+    public HomeController() throws MovieApiException {
+    }
 
-    public void filter(){
+
+    public void filter() throws MovieApiException {
         String searchText = searchField.getText();
         String selectedGenre = genreComboBox.getSelectionModel().getSelectedItem();
         String selectedReleaseYear = releaseYearComboBox.getSelectionModel().getSelectedItem();
@@ -78,7 +82,7 @@ public class HomeController implements Initializable {
         sortBtn.setText("Sort Z-A");
     }
 
-    public void filtering(String searchText, String selectedGenre, Integer releaseYear, Double ratingFrom, boolean UI){
+    public void filtering(String searchText, String selectedGenre, Integer releaseYear, Double ratingFrom, boolean UI) throws MovieApiException {
         MovieAPI API = new MovieAPI();
         allMovies = API.fetchMovies(searchText, selectedGenre, releaseYear, ratingFrom);
 
@@ -111,7 +115,7 @@ public class HomeController implements Initializable {
         ratingComboBox.setPromptText("Filter by Rating");
     }
 
-    public void reset(){
+    public void reset() throws MovieApiException {
         searchField.clear();
         genreComboBox.getSelectionModel().clearSelection();
         releaseYearComboBox.getSelectionModel().clearSelection();

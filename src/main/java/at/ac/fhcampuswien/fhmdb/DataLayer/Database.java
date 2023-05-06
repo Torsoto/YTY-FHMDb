@@ -1,5 +1,7 @@
 package at.ac.fhcampuswien.fhmdb.DataLayer;
 
+import at.ac.fhcampuswien.fhmdb.ExceptionHandling.DatabaseException;
+import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
@@ -8,7 +10,7 @@ import com.j256.ormlite.table.TableUtils;
 
 import java.sql.SQLException;
 
-public class Database {
+public class Database{
      public static final String DB_URL = "jdbc:h2:file: ./db/watchlistdb"; //URL for connection to h2 database
      public static final String user = "user"; //USERNAME for connection to h2 database
      public static final String password = "pass"; //PASSWORD for connection to h2 database
@@ -25,8 +27,8 @@ public class Database {
                createConnectionSource();
                dao = DaoManager.createDao(connectionSource, WatchlistMovieEntity.class);
                createTables();
-          } catch (SQLException e){
-               System.out.println(e.getMessage());
+          } catch (SQLException e) {
+               MovieCell.showExceptionDialog(new DatabaseException("Database problem"));
           }
      }
 
