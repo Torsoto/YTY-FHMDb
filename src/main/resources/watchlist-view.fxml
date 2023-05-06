@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox fx:id="rootWatchlist" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: #111111;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.fhcampuswien.fhmdb.controllers.WatchlistController">
+    <HBox alignment="CENTER_LEFT" spacing="10.0" style="-fx-background-color: #090909;">
+        <Label fx:id="homeLabel" styleClass="text-white" stylesheets="@styles.css" text="Home">
+            <HBox.margin>
+                <Insets left="2.0" top="2.0" />
+            </HBox.margin></Label>
+        <Label fx:id="watchlistLabel" styleClass="text-white" stylesheets="@styles.css" text="Watchlist">
+            <HBox.margin>
+                <Insets top="2.0" />
+            </HBox.margin>
+        </Label>
+        <Label fx:id="aboutLabel" styleClass="text-white" stylesheets="@styles.css" text="About">
+            <HBox.margin>
+                <Insets top="2.0" />
+            </HBox.margin>
+        </Label>
+        <VBox.margin>
+            <Insets />
+        </VBox.margin>
+    </HBox>
+    <HBox alignment="CENTER" prefHeight="42.0" prefWidth="347.0" spacing="20.0" style="-fx-background-color: #090909;">
+        <padding>
+            <Insets bottom="7.0" left="10.0" top="7.0" />
+        </padding>
+        <Label style="-fx-background-color: #00acc1; -fx-background-radius: 4;" text="YTY MOVIES" textFill="WHITE">
+            <font>
+                <Font name="Calibri Bold" size="36.0" />
+            </font>
+            <padding>
+                <Insets left="2.0" right="2.0" />
+            </padding>
+        </Label>
+        <JFXButton fx:id="refreshBtn" style="-fx-background-color:  #00acc1; -fx-text-fill: white;" text="Refresh" onAction="#handleRefresh"/>
+    </HBox>
+    <JFXListView fx:id="movieListView" style="-fx-background-color: #111111;" styleClass="background-black" stylesheets="@styles.css" VBox.vgrow="ALWAYS">
+        <VBox.margin>
+            <Insets />
+        </VBox.margin></JFXListView>
+</VBox>

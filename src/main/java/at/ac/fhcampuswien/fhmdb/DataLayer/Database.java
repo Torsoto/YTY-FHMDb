@@ -41,7 +41,7 @@ public class Database{
      }
 
      private static void createTables() throws SQLException {
-          TableUtils.createTableIfNotExists(connectionSource,WatchlistMovieEntity.class);
+          TableUtils.createTableIfNotExists(connectionSource, WatchlistMovieEntity.class);
      }
 
 
