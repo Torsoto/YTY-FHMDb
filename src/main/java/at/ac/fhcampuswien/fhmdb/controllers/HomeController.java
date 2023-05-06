@@ -1,6 +1,8 @@
-package at.ac.fhcampuswien.fhmdb;
+package at.ac.fhcampuswien.fhmdb.controllers;
 
 import at.ac.fhcampuswien.fhmdb.API.MovieAPI;
+import at.ac.fhcampuswien.fhmdb.ClickEventHandler;
+import at.ac.fhcampuswien.fhmdb.DataLayer.WatchlistRepository;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
 import com.jfoenix.controls.JFXButton;
@@ -14,6 +16,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -50,6 +53,11 @@ public class HomeController implements Initializable {
     public MovieAPI API = new MovieAPI();
     public List<Movie> allMovies = Movie.initializeMovies();
     protected final ObservableList<Movie> observableMovies = FXCollections.observableArrayList();  // automatically updates corresponding UI elements when underlying data changes
+    private WatchlistRepository repository = new WatchlistRepository();
+
+    private final ClickEventHandler onAddToWatchListClicked = (clickedItem) -> {
+
+    };
 
 
     public void filter(){
@@ -122,7 +130,7 @@ public class HomeController implements Initializable {
 
         // initialize UI stuff
         movieListView.setItems(observableMovies); // set data of observable list to list view
-        movieListView.setCellFactory(movieListView -> new MovieCell()); // use custom cell factory to display data
+        movieListView.setCellFactory(movieListView -> new MovieCell(onAddToWatchListClicked)); // use custom cell factory to display data
 
         genreComboBox.setPromptText("Filter by Genre");
         genreComboBox.getItems().addAll(Movie.getAllGenres());
@@ -130,11 +138,13 @@ public class HomeController implements Initializable {
         initComboBoxes();
 
         homeLabel.setOnMouseClicked(e -> {
-
+            observableMovies.clear();
+            observableMovies.addAll(allMovies);
+            sort();
         });
 
         watchlistLabel.setOnMouseClicked(e -> {
-
+            observableMovies.clear();
         });
 
 

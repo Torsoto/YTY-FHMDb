@@ -9,9 +9,9 @@ import com.j256.ormlite.table.TableUtils;
 import java.sql.SQLException;
 
 public class Database {
-     public static final String DB_URL = "jdbc:h2:file: ./db/watchlistdb";
-     public static final String user = "user";
-     public static final String password = "pass";
+     public static final String DB_URL = "jdbc:h2:file: ./db/watchlistdb"; //URL for connection to h2 database
+     public static final String user = "user"; //USERNAME for connection to h2 database
+     public static final String password = "pass"; //PASSWORD for connection to h2 database
 
      private static ConnectionSource connectionSource;
 
@@ -19,6 +19,7 @@ public class Database {
 
      private static Database instance;
 
+     //Constructor for Database -> create Connection -> create Dao -> create Tables
      private Database() {
           try {
                createConnectionSource();
@@ -29,7 +30,7 @@ public class Database {
           }
      }
 
-
+     //Singleton for only one access at a time
      public static Database getDatabase(){
           if (instance == null) {
                instance = new Database();

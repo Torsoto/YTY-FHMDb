@@ -29,4 +29,5 @@ public class WatchlistRepository {
         return new WatchlistMovieEntity(movie.getID(), movie.getTitle(), movie.getDescription(), entityMethodCall.genreToString(movie.getGenre()),
                 movie.getReleaseYear(), movie.getImgURL(),movie.getLength(), movie.getRating());
     }
+
 }
