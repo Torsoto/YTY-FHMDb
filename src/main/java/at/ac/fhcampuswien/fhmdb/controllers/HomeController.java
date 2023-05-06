@@ -159,7 +159,15 @@ public class HomeController implements Initializable {
         });
 
         watchlistLabel.setOnMouseClicked(e -> {
-            loadWatchlistFXML();
+
+
+            try {
+                loadWatchlistFXML();
+            } catch (MovieApiException ex) {
+                MovieCell.showExceptionDialog(new RuntimeException("Watchlist could not be loaded",ex));
+            }
+
+
         });
 
         sortBtn.setOnAction(actionEvent -> {
@@ -175,7 +183,7 @@ public class HomeController implements Initializable {
         });
     }
 
-    public void setWatchListView (String path) {
+    public void setWatchListView (String path) throws MovieApiException{
         FXMLLoader fxmlLoader = new FXMLLoader(FhmdbApplication.class.getResource("/watchlist-view.fxml"));
         try {
             Scene scene = new Scene(fxmlLoader.load(), 1280, 720);
@@ -183,11 +191,12 @@ public class HomeController implements Initializable {
             stage.setScene(scene);
 
         } catch (IOException ioe) {
-            System.out.println("test");
+            MovieCell.showExceptionDialog(new MovieApiException("Watchlist could not be loaded"));
+
         }
     }
 
-    public void loadWatchlistFXML(){
+    public void loadWatchlistFXML() throws MovieApiException {
         setWatchListView("/watchlist-view.fxml");
     }
     //returns the person who appears most often in the mainCast of the passed movies

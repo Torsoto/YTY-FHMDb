@@ -2,6 +2,7 @@ package at.ac.fhcampuswien.fhmdb.API;
 
 import at.ac.fhcampuswien.fhmdb.ExceptionHandling.MovieApiException;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
+import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import javafx.fxml.LoadException;
@@ -37,9 +38,11 @@ public class MovieAPI {
             JsonArray directorsArray = jsonObject.getAsJsonArray("directors");
             String director = new Gson().fromJson(directorsArray.get(0), String.class);
             JsonArray writersArray = jsonObject.getAsJsonArray("writers");
-            List<String> writers = new Gson().fromJson(writersArray, new TypeToken<List<String>>() {}.getType());
+            List<String> writers = new Gson().fromJson(writersArray, new TypeToken<List<String>>() {
+            }.getType());
             JsonArray mainCastArray = jsonObject.getAsJsonArray("mainCast");
-            List<String> mainCast = new Gson().fromJson(mainCastArray, new TypeToken<List<String>>() {}.getType());
+            List<String> mainCast = new Gson().fromJson(mainCastArray, new TypeToken<List<String>>() {
+            }.getType());
             double rating = jsonObject.get("rating").getAsDouble();
 
             return new Movie(title, description, genre, rating, releaseYear, mainCast, director, id, imgURL, writers, lengthInMinutes);
@@ -61,13 +64,13 @@ public class MovieAPI {
                 throw new MovieApiException("Unexpected response: " + response);
             }
         } catch (IOException ioe) {
-            throw new MovieApiException("The Request could not be executed",ioe);
-
+            MovieCell.showExceptionDialog(new MovieApiException("The Request could not be executed", ioe));
+            return null;
         }
     }
 
     public String buildURL(String query, String genre, Integer releaseYear, Double ratingFrom) {
-        String baseURL = "https://prog2.fh-campuswien.ac.at/movies";
+        String baseURL = "https://prog2.fh-campuswien.ac.at/movie";
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(baseURL)).newBuilder();
 
         if (query != null) {
@@ -91,20 +94,22 @@ public class MovieAPI {
         return "http://prog2.fh-campuswien.ac.at/movies/" + movieId;
     }
 
-    public List<Movie> fetchMovies(String query, String genre, Integer releaseYear, Double ratingFrom)throws MovieApiException {
-        String url = buildURL(query, genre, releaseYear, ratingFrom);
-        Request request = createRequest(url);
-        Gson gson = getGsonWithMovieDeserializer();
-        Type movieListType = new TypeToken<List<Movie>>() {}.getType();
+    public List<Movie> fetchMovies(String query, String genre, Integer releaseYear, Double ratingFrom) throws MovieApiException {
+            String url = buildURL(query, genre, releaseYear, ratingFrom);
+            Request request = createRequest(url);
+            Gson gson = getGsonWithMovieDeserializer();
+            Type movieListType = new TypeToken<List<Movie>>() {
+            }.getType();
 
-        return executeRequest(request, movieListType, gson);
+            return executeRequest(request, movieListType, gson);
+
 
     }
 
     public Movie fetchMovieById(String movieId, boolean UI) throws MovieApiException {
         String url = buildMovieByIdURL(movieId);
         Request request = createRequest(url);
-        Gson gson =  getGsonWithMovieDeserializer();
+        Gson gson = getGsonWithMovieDeserializer();
 
         return executeRequest(request, Movie.class, gson);
     }
