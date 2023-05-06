@@ -1,6 +1,7 @@
 package at.ac.fhcampuswien.fhmdb.ui;
 
 import at.ac.fhcampuswien.fhmdb.DataLayer.WatchlistRepository;
+import at.ac.fhcampuswien.fhmdb.ExceptionHandling.MovieApiException;
 import at.ac.fhcampuswien.fhmdb.Interfaces.ClickEventHandler;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import javafx.geometry.Insets;

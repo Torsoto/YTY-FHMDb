@@ -61,16 +61,18 @@ public class MovieAPI {
             if (response.isSuccessful()) {
                 return gson.fromJson(response.body().charStream(), type);
             } else {
-                throw new MovieApiException("Unexpected response: " + response);
+                MovieCell.showExceptionDialog(new MovieApiException("Unexpected response: " + response));
+                return null;
             }
         } catch (IOException ioe) {
             MovieCell.showExceptionDialog(new MovieApiException("The Request could not be executed", ioe));
             return null;
         }
+
     }
 
     public String buildURL(String query, String genre, Integer releaseYear, Double ratingFrom) {
-        String baseURL = "https://prog2.fh-campuswien.ac.at/movie";
+        String baseURL = "https://prog2.fh-campuswien.ac.at/movies";
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(baseURL)).newBuilder();
 
         if (query != null) {
