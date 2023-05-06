@@ -15,7 +15,7 @@ public class Database {
 
      private static ConnectionSource connectionSource;
 
-     Dao<WatchlistMovieEntity, Long> dao;
+     private Dao<WatchlistMovieEntity, Long> dao;
 
      private static Database instance;
 
@@ -29,10 +29,6 @@ public class Database {
           }
      }
 
-     public void testDB() throws SQLException {
-          WatchlistMovieEntity entity = new WatchlistMovieEntity("asdas","abc","wasamk","horror",2019,"www.oasch.com",22,8);
-           dao.create(entity);
-     }
 
      public static Database getDatabase(){
           if (instance == null) {

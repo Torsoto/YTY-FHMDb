@@ -1,5 +1,6 @@
 package at.ac.fhcampuswien.fhmdb.ui;
 
+import at.ac.fhcampuswien.fhmdb.DataLayer.Database;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -16,15 +17,15 @@ public class MovieCell extends ListCell<Movie> {
     private final Label releaseYear = new Label();
     private final Label rating = new Label();
     private final Label genre = new Label();
-    private final Button details = new Button();
-    private final Button Watchlist = new Button();
+    private final Button openDetailsBtn = new Button();
+    private final Button addToWatchlistBtn = new Button();
     private final Label mainCast = new Label();
     private final Label director = new Label();
     private final Label ID = new Label();
     private final Label writers = new Label();
     private final Label length = new Label();
     private final Label imgURL = new Label();
-    private final HBox Buttons = new HBox(details, Watchlist);
+    private final HBox Buttons = new HBox(openDetailsBtn, addToWatchlistBtn);
     private final VBox layout = new VBox(title, description, genre, releaseYear);
     private final StackPane stackPane = new StackPane(layout, rating, Buttons);
 
@@ -69,22 +70,27 @@ public class MovieCell extends ListCell<Movie> {
                 System.out.println(e.getMessage());
             }
 
-            details.setOnAction(event -> {
-                if (details.getText().equals("Show Details")) {
-                    details.setText("Hide Details");
+            openDetailsBtn.setOnAction(event -> {
+                if (openDetailsBtn.getText().equals("Show Details")) {
+                    openDetailsBtn.setText("Hide Details");
                     layout.getChildren().addAll(mainCast, director, ID, writers, length, imgURL);
                 } else {
-                    details.setText("Show Details");
+                    openDetailsBtn.setText("Show Details");
                     layout.getChildren().removeAll(mainCast, director, ID, writers, length, imgURL);
                 }
             });
 
-            Watchlist.setOnAction(event -> {
-                if (Watchlist.getText().equals("Add to Watchlist")) {
-                    Watchlist.setText("Remove from Watchlist");
+            addToWatchlistBtn.setOnAction(event -> {
+                if (addToWatchlistBtn.getText().equals("Add to Watchlist")) {
+                    addToWatchlistBtn.setText("Remove from Watchlist");
                     //TODO Add code so it adds from DATABASE
+
+                    addToWatchlistBtn.setOnMouseClicked(mouseEvent -> {
+
+                        //Database.getDatabase().dao.create();
+                    });
                 } else {
-                    Watchlist.setText("Add to Watchlist");
+                    addToWatchlistBtn.setText("Add to Watchlist");
                     //TODO Add code so it removes from DATABASE
                 }
             });
@@ -102,8 +108,8 @@ public class MovieCell extends ListCell<Movie> {
             genre.getStyleClass().add("text-genre");
             releaseYear.getStyleClass().add("text-releaseYear");
             rating.getStyleClass().add("text-rating");
-            details.getStyleClass().add("Btn");
-            Watchlist.getStyleClass().add("Btn");
+            openDetailsBtn.getStyleClass().add("Btn");
+            addToWatchlistBtn.getStyleClass().add("Btn");
             layout.setBackground(new Background(new BackgroundFill(Color.web("#00454c"), null, null)));
 
             // layout
@@ -114,8 +120,8 @@ public class MovieCell extends ListCell<Movie> {
             layout.spacingProperty().set(15);
             layout.alignmentProperty().set(Pos.CENTER_LEFT);
 
-            details.setText("Show Details");
-            Watchlist.setText("Add to Watchlist");
+            openDetailsBtn.setText("Show Details");
+            addToWatchlistBtn.setText("Add to Watchlist");
             StackPane.setAlignment(rating, Pos.TOP_RIGHT);
             Buttons.setSpacing(10);
             rating.setPadding(new Insets(5));
