@@ -1,6 +1,7 @@
 package at.ac.fhcampuswien.fhmdb.controllers;
 
 import at.ac.fhcampuswien.fhmdb.API.MovieAPI;
+import at.ac.fhcampuswien.fhmdb.ExceptionHandling.DatabaseException;
 import at.ac.fhcampuswien.fhmdb.ExceptionHandling.MovieApiException;
 import at.ac.fhcampuswien.fhmdb.FhmdbApplication;
 import at.ac.fhcampuswien.fhmdb.Interfaces.ClickEventHandler;
@@ -24,6 +25,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -62,10 +64,22 @@ public class HomeController implements Initializable {
     public MovieAPI API = new MovieAPI();
     public List<Movie> allMovies = Movie.initializeMovies();
     protected final ObservableList<Movie> observableMovies = FXCollections.observableArrayList();  // automatically updates corresponding UI elements when underlying data changes
-    private WatchlistRepository repository = new WatchlistRepository();
+    private final WatchlistRepository repository = new WatchlistRepository();
 
-    private final ClickEventHandler onAddToWatchListClicked = (clickedItem) -> {
-
+    private final ClickEventHandler<Movie> onAddToWatchListClicked = (clickedItem) -> {
+        try {
+            if (!repository.isMovieInWatchlist(clickedItem)){
+                try {
+                    repository.addToWatchlist(clickedItem);
+                } catch (SQLException e) {
+                    MovieCell.showExceptionDialog(new DatabaseException("Database Problem: Probably already in use"));
+                }
+            } else {
+                MovieCell.showExceptionDialog(new DatabaseException("Movie already in your Watchlist!"));
+            }
+        } catch (SQLException e) {
+            MovieCell.showExceptionDialog(new DatabaseException("Database problem!"));
+        }
     };
 
     public HomeController() throws MovieApiException {
@@ -86,12 +100,12 @@ public class HomeController implements Initializable {
         if (selectedRating != null) {
             ratingFrom = Double.parseDouble(selectedRating);
         }
-        filtering(searchText, selectedGenre, releaseYear, ratingFrom, false);
+        filtering(searchText, selectedGenre, releaseYear, ratingFrom);
         sort();
         sortBtn.setText("Sort Z-A");
     }
 
-    public void filtering(String searchText, String selectedGenre, Integer releaseYear, Double ratingFrom, boolean UI) throws MovieApiException {
+    public void filtering(String searchText, String selectedGenre, Integer releaseYear, Double ratingFrom) throws MovieApiException {
         MovieAPI API = new MovieAPI();
         allMovies = API.fetchMovies(searchText, selectedGenre, releaseYear, ratingFrom);
 
@@ -159,15 +173,11 @@ public class HomeController implements Initializable {
         });
 
         watchlistLabel.setOnMouseClicked(e -> {
-
-
             try {
                 loadWatchlistFXML();
             } catch (MovieApiException ex) {
                 MovieCell.showExceptionDialog(new RuntimeException("Watchlist could not be loaded",ex));
             }
-
-
         });
 
         sortBtn.setOnAction(actionEvent -> {
@@ -184,7 +194,7 @@ public class HomeController implements Initializable {
     }
 
     public void setWatchListView (String path) throws MovieApiException{
-        FXMLLoader fxmlLoader = new FXMLLoader(FhmdbApplication.class.getResource("/watchlist-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(FhmdbApplication.class.getResource(path));
         try {
             Scene scene = new Scene(fxmlLoader.load(), 1280, 720);
             Stage stage = (Stage)root.getScene().getWindow();
@@ -199,6 +209,11 @@ public class HomeController implements Initializable {
     public void loadWatchlistFXML() throws MovieApiException {
         setWatchListView("/watchlist-view.fxml");
     }
+
+    public void loadAboutFXML() throws MovieApiException {
+        setWatchListView("NOT FXML");
+    }
+
     //returns the person who appears most often in the mainCast of the passed movies
     String getMostPopularActor(List<Movie> movies) {
         Map<String, Long> actorsCount = movies.stream()

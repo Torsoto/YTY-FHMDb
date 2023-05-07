@@ -15,4 +15,7 @@ module at.ac.fhcampuswien.fhmdb {
     opens at.ac.fhcampuswien.fhmdb.controllers to javafx.fxml;
     exports at.ac.fhcampuswien.fhmdb.Interfaces;
     opens at.ac.fhcampuswien.fhmdb.Interfaces to javafx.fxml;
+    exports at.ac.fhcampuswien.fhmdb.ExceptionHandling;
+    exports at.ac.fhcampuswien.fhmdb.models;
+    exports at.ac.fhcampuswien.fhmdb.API;
 }

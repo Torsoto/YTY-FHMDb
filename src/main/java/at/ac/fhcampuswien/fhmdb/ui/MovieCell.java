@@ -1,7 +1,6 @@
 package at.ac.fhcampuswien.fhmdb.ui;
 
 import at.ac.fhcampuswien.fhmdb.DataLayer.WatchlistRepository;
-import at.ac.fhcampuswien.fhmdb.ExceptionHandling.DatabaseException;
 import at.ac.fhcampuswien.fhmdb.Interfaces.ClickEventHandler;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import javafx.geometry.Insets;
@@ -9,9 +8,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-
-import java.sql.SQLException;
-
 
 public class MovieCell extends ListCell<Movie> {
     private final Label title = new Label();
@@ -30,7 +26,6 @@ public class MovieCell extends ListCell<Movie> {
     private final HBox Buttons = new HBox(openDetailsBtn, addToWatchlistBtn);
     private final VBox layout = new VBox(title, description, genre, releaseYear);
     private final StackPane stackPane = new StackPane(layout, rating, Buttons);
-    private final WatchlistRepository repo = new WatchlistRepository();
 
     public MovieCell(ClickEventHandler<Movie> addToWatchlistClicked) {
         super();
@@ -42,11 +37,11 @@ public class MovieCell extends ListCell<Movie> {
     public MovieCell() {
 
     }
-    public static void showExceptionDialog(Throwable throwable) {    // source: http://www.java2s.com/example/java/javafx/show-javafx-exception-dialog.html
-        //throwable.printStackTrace();
+    public static void showExceptionDialog(Throwable throwable) {
+        // source: http://www.java2s.com/example/java/javafx/show-javafx-exception-dialog.html
 
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Fhmdb Dialog");
+        alert.setTitle("ERROR");
         alert.setHeaderText("Thrown Exception");
         alert.setContentText("App has thrown an exception.");
 
@@ -120,23 +115,6 @@ public class MovieCell extends ListCell<Movie> {
                 } else {
                     openDetailsBtn.setText("Show Details");
                     layout.getChildren().removeAll(mainCast, director, ID, writers, length, imgURL);
-                }
-            });
-
-
-            addToWatchlistBtn.setOnAction(event -> {
-                try {
-                    if (!repo.isMovieInWatchlist(movie)){
-                        try {
-                            repo.addToWatchlist(movie);
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
-                    } else {
-                        MovieCell.showExceptionDialog(new DatabaseException("Movie already in your Watchlist!"));
-                    }
-                } catch (SQLException e) {
-                    MovieCell.showExceptionDialog(new DatabaseException("Database problem! Error in ddd to Watchlist functionality"));
                 }
             });
 
