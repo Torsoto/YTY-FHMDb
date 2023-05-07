@@ -4,8 +4,8 @@ import at.ac.fhcampuswien.fhmdb.models.Movie;
 import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class WatchlistRepository {
     Dao<WatchlistMovieEntity, Long> dao;
@@ -37,21 +37,15 @@ public class WatchlistRepository {
 
     public boolean isMovieInWatchlist(Movie movie) throws SQLException {
         List<WatchlistMovieEntity> entities = dao.queryForAll();
-        for (WatchlistMovieEntity entity : entities) {
-            if (entity.getApiId() != null && entity.getApiId().equals(movie.getID())) {
-                return true;
-            }
-        }
-        return false;
+        return entities.stream()
+                .anyMatch(entity -> entity.getApiId() != null && entity.getApiId().equals(movie.getID()));
     }
 
     public List<Movie> getAllMovies() throws SQLException {
         List<WatchlistMovieEntity> entities = readAllMovies();
-        List<Movie> movies = new ArrayList<>();
-        for (WatchlistMovieEntity entity : entities) {
-            movies.add(entityToMovie(entity));
-        }
-        return movies;
+        return entities.stream()
+                .map(this::entityToMovie)
+                .collect(Collectors.toList());
     }
 
     public void removeFromWatchlist(Movie movie) throws SQLException {

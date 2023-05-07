@@ -89,16 +89,6 @@ public class MovieCellWatchList extends ListCell<Movie> {
                 }
             });
 
-
-            removeFromWatchlistBtn.setOnAction(event -> {
-                try {
-                    repo.removeFromWatchlist(movie);
-                } catch (SQLException e) {
-                    MovieCell.showExceptionDialog(new DatabaseException("Database problem!"));
-                }
-            });
-
-
             // color scheme
             mainCast.getStyleClass().add("text-genre");
             writers.getStyleClass().add("text-genre");

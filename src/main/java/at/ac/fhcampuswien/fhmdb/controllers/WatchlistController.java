@@ -1,7 +1,6 @@
 package at.ac.fhcampuswien.fhmdb.controllers;
 
-import at.ac.fhcampuswien.fhmdb.API.MovieAPI;
-import at.ac.fhcampuswien.fhmdb.DataLayer.WatchlistMovieEntity;
+import at.ac.fhcampuswien.fhmdb.ExceptionHandling.DatabaseException;
 import at.ac.fhcampuswien.fhmdb.ExceptionHandling.MovieApiException;
 import at.ac.fhcampuswien.fhmdb.FhmdbApplication;
 import at.ac.fhcampuswien.fhmdb.Interfaces.ClickEventHandler;
@@ -9,8 +8,6 @@ import at.ac.fhcampuswien.fhmdb.DataLayer.WatchlistRepository;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCellWatchList;
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,7 +17,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -28,8 +24,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class WatchlistController implements Initializable {
     @FXML
@@ -41,7 +35,7 @@ public class WatchlistController implements Initializable {
     public Label watchlistLabel;
     @FXML
     public Label aboutLabel;
-    private WatchlistRepository repository = new WatchlistRepository();
+    private final WatchlistRepository repository = new WatchlistRepository();
     public List<Movie> allMovies = Movie.initializeMovies();
     @FXML
     public VBox rootWatchlist;
@@ -49,8 +43,12 @@ public class WatchlistController implements Initializable {
     public Button refreshBtn;
     protected final ObservableList<Movie> observableMovies = FXCollections.observableArrayList();  // automatically updates corresponding UI elements when underlying data changes
 
-    private final ClickEventHandler onAddToWatchListClicked = (clickedItem) -> {
-
+    private final ClickEventHandler<Movie> onAddToWatchListClicked = (clickedItem) -> {
+        try {
+            repository.removeFromWatchlist(clickedItem);
+        } catch (SQLException e) {
+            MovieCell.showExceptionDialog(new DatabaseException("Database problem!"));
+        }
     };
 
     public WatchlistController() throws MovieApiException {
@@ -67,12 +65,13 @@ public class WatchlistController implements Initializable {
             observableMovies.addAll(repository.getAllMovies());
             sort();
         } catch (SQLException e) {
-            System.out.println("Error parsing movies from database");
+            MovieCell.showExceptionDialog(new DatabaseException("Database Problem: ERROR getting Watchlist from Database"));
         }
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
         try {
             observableMovies.addAll(repository.getAllMovies());
             sort();
