@@ -17,15 +17,15 @@ public class Database{
 
      private static ConnectionSource connectionSource;
 
-     private Dao<WatchlistMovieEntity, Long> dao;
+     private Dao<WatchlistMovieEntity, Long> dao; //Interface between the application and the database through which database accesses such as creating, reading, updating and deleting records can be performed.
 
      private static Database instance;
 
      //Constructor for Database -> create Connection -> create Dao -> create Tables
      private Database() {
           try {
-               createConnectionSource();
-               dao = DaoManager.createDao(connectionSource, WatchlistMovieEntity.class);
+               createConnectionSource(); //create Connection to h2 database
+               dao = DaoManager.createDao(connectionSource, WatchlistMovieEntity.class); //create Dao to connect to h2 database
                createTables();
           } catch (SQLException e) {
                MovieCell.showExceptionDialog(new DatabaseException("Database problem: already in use!"));
@@ -40,19 +40,23 @@ public class Database{
           return instance;
      }
 
+     ////tables in h2 database are created
      private static void createTables() throws SQLException {
           TableUtils.createTableIfNotExists(connectionSource, WatchlistMovieEntity.class);
      }
 
 
+     //This method is used to create a connection to the database. Here the JdbcConnectionSource object is created which represents the connection to the H2 database.
      private static void createConnectionSource() throws SQLException {
           connectionSource  = new JdbcConnectionSource(DB_URL, user, password);
      }
 
+     //This method returns the connectionSource object that represents the connection to the database
      public static ConnectionSource getConnectionSource() {
           return connectionSource;
      }
 
+     //This method returns the dao object used for database access.
      public Dao<WatchlistMovieEntity, Long> getWatchlistDao() {
           return dao;
      }
